@@ -2393,7 +2393,7 @@ class TestFrame(wx.Frame):
         self.client.SetFont(
             wx.Font(10, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
         self.client.SetFontSizeAxis(20)
-        self.client.SetFontSizeLegend(12)
+        self.client.fontSizeLegend = 12
         self.client.SetXSpec('min')
         self.client.SetYSpec('none')
         self.client.Draw(_draw3Objects())
@@ -2507,7 +2507,7 @@ class TestFrame(wx.Frame):
         self.client.SetFont(
             wx.Font(10, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
         self.client.SetFontSizeAxis(10)
-        self.client.SetFontSizeLegend(7)
+        self.client.fontSizeLegend = 7
         self.client.setLogScale((False, False))
         self.client.SetXSpec('auto')
         self.client.SetYSpec('auto')

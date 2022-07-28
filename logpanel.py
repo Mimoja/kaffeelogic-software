@@ -36,8 +36,8 @@ class LogPanel(wx.Panel):
         # create the widgets
         self.standardize = True
         self.canvas = core_studio.myPlotCanvas(self)
-        self.canvas.SetEnableHiRes(True)
-        self.canvas.SetEnableAntiAliasing(True)
+        self.canvas.enableHiRes = True
+        self.canvas.enableAntiAliasing = True
         self.canvas.SetGridColour(core_studio.GRID_COLOUR)
 
         if frame.options.getUserOption("phases-panel-position") != "left":
@@ -125,7 +125,7 @@ class LogPanel(wx.Panel):
         frame = self.frame
         colours = frame.logData.colourList
         styles = frame.logData.eventStyles
-        self.canvas.SetFontSizeLegend(frame.legendFontSize)
+        self.canvas.fontSizeLegend = frame.legendFontSize
         linesToGraph = []
         if frame.logData.enabled.get('zones'):
             linesToGraph += core_studio.drawZones(self, frame.page1.pointsAsGraphed)

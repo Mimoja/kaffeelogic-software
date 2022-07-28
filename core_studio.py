@@ -2397,9 +2397,9 @@ class ProfilePanel(wx.Panel):
         self.canvas.canvas.Bind(wx.EVT_KEY_UP, self.onKeyUpEvent)
         self.canvas.canvas.SetWindowStyleFlag(wx.WANTS_CHARS)
 
-        self.canvas.SetEnableHiRes(True)
-        self.canvas.SetEnableAntiAliasing(True)
-        self.canvas.SetGridColour(GRID_COLOUR)
+        self.canvas.enableHiRes = True
+        self.canvas.enableAntiAliasing = True
+        #self.canvas.gridPen = wx.Pen(GRID_COLOUR, 1, wx.PENSTYLE_DOT)
 
         accel_tbl = wx.AcceleratorTable([
             (wx.ACCEL_NORMAL, wx.WXK_INSERT, frame.INSERTPOINT_ID),
@@ -2507,7 +2507,7 @@ class ProfilePanel(wx.Panel):
         self.historyCanUndo = False
 
     def reDraw(self):
-        self.canvas.SetFontSizeLegend(self.frame.legendFontSize)
+        self.canvas.fontSizeLegend = self.frame.legendFontSize
         if self.zoomScale == 1 and not self.expandY:
             xAxis = None
             yAxis = None
@@ -2543,7 +2543,7 @@ class ProfilePanel(wx.Panel):
                                       thresholdString,
                                       self.closest_point,
                                       int(round(float(self.frame.configuration["emulation_mode"]))),
-                                      self.canvas.GetEnableGrid())
+                                      self.canvas.enableGrid)
             minX, maxX, minY, maxY = extremaOfAllPoints(self.profilePoints)
             # print 'minX, maxX, minY, maxY', minX, maxX, minY, maxY
             maxXgraphed = ceil(self.pointsAsGraphed[-1][0]) + 30.0
@@ -3065,7 +3065,7 @@ class ProfilePanel(wx.Panel):
                 # check if we are on one of the level lines
                 if (
                         self.recommended_endpoint is not None and
-                        self.canvas.GetEnableGrid() and abs(
+                        self.canvas.enableGrid and abs(
                     self.mouseIsAt[0] - self.recommended_endpoint[0]) < PROXIMITY_THRESHOLD
                 ):
                     self.closest_point = Point(self.recommended_endpoint[0], self.recommended_endpoint[1])
@@ -3157,7 +3157,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.programPath = utilities.getProgramPath()
 
         if isWindows or isLinux:
-            icon = wx.EmptyIcon()
+            icon = wx.Icon()
             icon.CopyFromBitmap(wx.Bitmap(self.programPath + r"favicon.ico", wx.BITMAP_TYPE_ANY))
             self.SetIcon(icon)
 
@@ -3216,28 +3216,28 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.ZOOMIN_TOOL_ID = wx.NewId()
         self.ZOOMOUT_TOOL_ID = wx.NewId()
         self.VIEWMEMSTICK_TOOL_ID = wx.NewId()
-        newtool = tb.AddTool(self.NEW_TOOL_ID, toolImages["new"], shortHelpString='New')
+        newtool = tb.AddTool(self.NEW_TOOL_ID, '', toolImages["new"], shortHelp='New')
         newtool.id = self.NEW_TOOL_ID
-        loadtool = tb.AddTool(self.LOAD_TOOL_ID, toolImages["load"], shortHelpString='Open')
+        loadtool = tb.AddTool(self.LOAD_TOOL_ID, '', toolImages["load"], shortHelp='Open')
         loadtool.id = self.LOAD_TOOL_ID
-        self.savetool = tb.AddTool(self.SAVE_FILE_TOOL_ID, toolImages["save"], shortHelpString='Save')
+        self.savetool = tb.AddTool(self.SAVE_FILE_TOOL_ID, '', toolImages["save"], shortHelp='Save')
         self.savetool.id = self.SAVE_FILE_TOOL_ID
         tb.AddSeparator()
-        self.undotool = tb.AddTool(self.UNDO_TOOL_ID, toolImages["undo"], shortHelpString='Undo')
+        self.undotool = tb.AddTool(self.UNDO_TOOL_ID, '', toolImages["undo"], shortHelp='Undo')
         self.undotool.id = self.UNDO_TOOL_ID
-        self.redotool = tb.AddTool(self.REDO_TOOL_ID, toolImages["redo"], shortHelpString='Redo')
+        self.redotool = tb.AddTool(self.REDO_TOOL_ID, '', toolImages["redo"], shortHelp='Redo')
         self.redotool.id = self.REDO_TOOL_ID
-        self.smoothtool = tb.AddTool(self.SMOOTH_TOOL_ID, toolImages["smooth"], shortHelpString='Smooth point')
+        self.smoothtool = tb.AddTool(self.SMOOTH_TOOL_ID, '', toolImages["smooth"], shortHelp='Smooth point')
         self.smoothtool.id = self.SMOOTH_TOOL_ID
-        self.zoomresettool = tb.AddTool(self.ZOOMRESET_TOOL_ID, toolImages["zoomreset"], shortHelpString='Zoom all')
+        self.zoomresettool = tb.AddTool(self.ZOOMRESET_TOOL_ID, '', toolImages["zoomreset"], shortHelp='Zoom all')
         self.zoomresettool.id = self.ZOOMRESET_TOOL_ID
-        self.zoomintool = tb.AddTool(self.ZOOMIN_TOOL_ID, toolImages["zoomin"], shortHelpString='Zoom in')
+        self.zoomintool = tb.AddTool(self.ZOOMIN_TOOL_ID, '', toolImages["zoomin"], shortHelp='Zoom in')
         self.zoomintool.id = self.ZOOMIN_TOOL_ID
-        self.zoomouttool = tb.AddTool(self.ZOOMOUT_TOOL_ID, toolImages["zoomout"], shortHelpString='Zoom out')
+        self.zoomouttool = tb.AddTool(self.ZOOMOUT_TOOL_ID, '', toolImages["zoomout"], shortHelp='Zoom out')
         self.zoomouttool.id = self.ZOOMOUT_TOOL_ID
         tb.AddSeparator()
-        self.viewmemsticktool = tb.AddTool(self.VIEWMEMSTICK_TOOL_ID, toolImages["viewmemstick"],
-                                           toolImages["viewmemstick_disabled"], shortHelpString='View memory stick')
+        self.viewmemsticktool = tb.AddTool(self.VIEWMEMSTICK_TOOL_ID, '', toolImages["viewmemstick"],
+                                           toolImages["viewmemstick_disabled"], shortHelp='View memory stick')
         self.viewmemsticktool.id = self.VIEWMEMSTICK_TOOL_ID
         tb.Realize()
 
@@ -3293,21 +3293,21 @@ class MyGraph(wx.Frame, w, BaseDataObject):
 
         newitem = wx.MenuItem(self.fileMenu, NEW_FILE_ID, '&New\tCtrl+N', 'New profile')
         newitem.SetBitmap(menuImages["new"])
-        self.fileMenu.AppendItem(newitem)
+        self.fileMenu.Append(newitem)
         loaditem = wx.MenuItem(self.fileMenu, LOAD_FILE_ID, '&Open ...\tCtrl+O', 'Open a file')
         loaditem.SetBitmap(menuImages["load"])
-        self.fileMenu.AppendItem(loaditem)
+        self.fileMenu.Append(loaditem)
 
         self.recentFileMenu = wx.Menu()
-        self.fileMenu.AppendMenu(self.RECENT_FILE_ID, 'Recent &files', self.recentFileMenu)
+        self.fileMenu.Append(self.RECENT_FILE_ID, 'Recent &files', self.recentFileMenu)
         self.fileMenu.Enable(self.RECENT_FILE_ID, False)
 
         self.saveitem = wx.MenuItem(self.fileMenu, SAVE_FILE_ID, '&Save\tCtrl+S', 'Save file')
         self.saveitem.SetBitmap(menuImages["save"])
-        self.fileMenu.AppendItem(self.saveitem)
+        self.fileMenu.Append(self.saveitem)
         saveAsitem = self.fileMenu.Append(SAVE_AS_FILE_ID, 'Save &as ...\tCtrl+Shift+S', 'Save as file')
         filePropertiesitem = self.fileMenu.Append(FILE_PROPERTIES_ID, '&Properties ...', 'File properties')
-        self.fileMenu.AppendItem(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
+        self.fileMenu.Append(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
         self.extractitem = self.fileMenu.Append(EXTRACT_PROFILE_ID, 'Ext&ract profile from log\tCtrl+R',
                                                 'Extract profile from log')
 
@@ -3323,24 +3323,24 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                                                       'Export Sonofresco profile')
         self.exportpdfitem = wx.MenuItem(exportMenu, EXPORT_PDF_ID, '&PDF ...\tCtrl-P', 'Export PDF document')
         self.exportpdfitem.SetBitmap(menuImages["pdf_icon"])
-        exportMenu.AppendItem(self.exportpdfitem)
-        self.fileMenu.AppendMenu(wx.NewId(), '&Import', importMenu)
-        self.fileMenu.AppendMenu(wx.NewId(), '&Export', exportMenu)
+        exportMenu.Append(self.exportpdfitem)
+        self.fileMenu.Append(wx.NewId(), '&Import', importMenu)
+        self.fileMenu.Append(wx.NewId(), '&Export', exportMenu)
 
-        self.fileMenu.AppendItem(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
+        self.fileMenu.Append(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
         self.newappwindowitem = self.fileMenu.Append(NEW_APP_WINDOW_ID, 'New app &window\tCtrl+W', 'New app window')
 
-        self.fileMenu.AppendItem(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
+        self.fileMenu.Append(wx.MenuItem(self.fileMenu, wx.ID_SEPARATOR))
         quititem = self.fileMenu.Append(wx.ID_EXIT, '&Quit\tCtrl+Q', 'Quit application')
         menubar.Append(self.fileMenu, '&File')
 
         editMenu = wx.Menu()
         self.undoItem = wx.MenuItem(editMenu, UNDO_ID, '&Undo\tCtrl+Z')
         self.undoItem.SetBitmap(menuImages["undo"])
-        editMenu.AppendItem(self.undoItem)
+        editMenu.Append(self.undoItem)
         self.redoItem = wx.MenuItem(editMenu, REDO_ID, '&Redo\tCtrl+Y')
         self.redoItem.SetBitmap(menuImages["redo"])
-        editMenu.AppendItem(self.redoItem)
+        editMenu.Append(self.redoItem)
         menubar.Append(editMenu, '&Edit')
 
         drawMenu = wx.Menu()
@@ -3352,48 +3352,48 @@ class MyGraph(wx.Frame, w, BaseDataObject):
             inschar = 'Ins'
         insertPointItem = drawMenu.Append(self.INSERTPOINT_ID, '&Insert point\t' + inschar, 'Insert point to the right')
         deletePointItem = drawMenu.Append(self.DELETEPOINT_ID, '&Delete point\t' + delchar, 'Delete selected point')
-        drawMenu.AppendItem(wx.MenuItem(drawMenu, wx.ID_SEPARATOR))
+        drawMenu.Append(wx.MenuItem(drawMenu, wx.ID_SEPARATOR))
         smoothPointItem = wx.MenuItem(drawMenu, SMOOTHPOINT_ID, '&Smooth point\tCtrl+/', 'Smooth selected point')
         smoothPointItem.SetBitmap(wx.Bitmap(self.programPath + r"toolbar/smooth.png", wx.BITMAP_TYPE_ANY))
-        drawMenu.AppendItem(smoothPointItem)
+        drawMenu.Append(smoothPointItem)
         smoothAllItem = drawMenu.Append(SMOOTHALL_ID, 'Smooth &all\tAlt+Ctrl+/', 'Smooth all points')
         menubar.Append(drawMenu, '&Draw')
 
         viewMenu = wx.Menu()
         zoomInItem = wx.MenuItem(viewMenu, ZOOMIN_ID, 'Zoom &in\tCtrl++')
         zoomInItem.SetBitmap(menuImages["zoomin"])
-        viewMenu.AppendItem(zoomInItem)
+        viewMenu.Append(zoomInItem)
         zoomOutItem = wx.MenuItem(viewMenu, ZOOMOUT_ID, 'Zoom &out\tCtrl+-')
         zoomOutItem.SetBitmap(menuImages["zoomout"])
-        viewMenu.AppendItem(zoomOutItem)
+        viewMenu.Append(zoomOutItem)
         expandYInItem = viewMenu.Append(self.EXPANDYIN_ID, 'E&xpand Y in\tAlt+Ctrl++')
         expandYOutItem = viewMenu.Append(EXPANDYOUT_ID, 'Expand Y ou&t\tAlt+Ctrl+-')
         zoomResetItem = wx.MenuItem(viewMenu, ZOOMRESET_ID, 'Zoom a&ll\tCtrl+L')
         zoomResetItem.SetBitmap(menuImages["zoomreset"])
-        viewMenu.AppendItem(zoomResetItem)
+        viewMenu.Append(zoomResetItem)
         menubar.Append(viewMenu, '&View')
 
         toolsMenu = wx.Menu()
         self.viewMemstickItem = wx.MenuItem(toolsMenu, VIEWMEMSTICK_ID, 'View &memory stick ...\tCtrl+M')
         self.viewMemstickItem.SetBitmap(menuImages["viewmemstick"])
-        toolsMenu.AppendItem(self.viewMemstickItem)
-        toolsMenu.AppendItem(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
+        toolsMenu.Append(self.viewMemstickItem)
+        toolsMenu.Append(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
         self.compareDefaultItem = toolsMenu.Append(COMPAREDEFAULT_ID, '&Compare default', 'Compare default',
                                                    kind=wx.ITEM_CHECK)
         self.compareItem = toolsMenu.Append(COMPARE_ID, 'Compare &files...\tCtrl+F',
                                             'Compare files')  # , kind=wx.ITEM_CHECK)
         self.clearCompareItem = toolsMenu.Append(CLEAR_COMPARE_ID, 'Clea&r compare', 'Clear compare')
-        toolsMenu.AppendItem(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
+        toolsMenu.Append(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
         self.transformItem = toolsMenu.Append(TRANSFORM_ID, '&Transform profile ...\tCtrl+T', 'Transform profile')
         self.mergeItem = toolsMenu.Append(self.MERGE_ID, 'M&erge profile ...\tCtrl+E', 'Merge profile')
-        toolsMenu.AppendItem(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
+        toolsMenu.Append(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
         self.areaUnderCurveItem = toolsMenu.Append(AREAUNDERCURVE_ID, '&Area under curve ...\tCtrl+U',
                                                    'Area under curve')
         self.calculateitem = toolsMenu.Append(CALCULATE_ID, 'Time calc&ulator ...\tAlt+Ctrl+U', 'Time calculator')
-        toolsMenu.AppendItem(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
+        toolsMenu.Append(wx.MenuItem(toolsMenu, wx.ID_SEPARATOR))
         self.captureImageItem = wx.MenuItem(toolsMenu, CAPTUREIMAGE_ID, 'Capture and save &image ...')
         self.captureImageItem.SetBitmap(menuImages["camera"])
-        toolsMenu.AppendItem(self.captureImageItem)
+        toolsMenu.Append(self.captureImageItem)
         self.viewSourceItem = wx.MenuItem(None, self.VIEWSOURCE_ID, 'View &source ...', 'View source')
         self.exploreBackupsItem = toolsMenu.Append(EXPLORE_BACKUPS_ID, 'E&xplore memory stick backups ...',
                                                    'Explore memory stick backups')
@@ -3410,7 +3410,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.difficultyExpertItem = difficultyMenu.Append(DIFFICULTYEXPERT_ID, 'Expert', 'Expert', kind=wx.ITEM_RADIO)
         self.difficultyEngineerItem = difficultyMenu.Append(DIFFICULTYENGINEER_ID, 'Engineer', 'Engineer',
                                                             kind=wx.ITEM_RADIO)
-        optionsMenu.AppendMenu(wx.NewId(), 'Difficulty', difficultyMenu)
+        optionsMenu.Append(wx.NewId(), 'Difficulty', difficultyMenu)
         self.editGeneralOptionsItem = optionsMenu.Append(EDITGENERALOPTIONS_ID, '&General options ...',
                                                          'General options')
         self.editCompareOptionsItem = optionsMenu.Append(EDITCOMPAREOPTIONS_ID, '&Compare options ...',
@@ -3549,7 +3549,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.updateDifficulty()
         self.recommendationsAlreadyGiven = []
         wx.CallAfter(userOptions.messageIfUpdated, self)
-        self.TipOfTheDay = wx.CreateFileTipProvider(self.programPath + TIP_FILE,
+        self.TipOfTheDay = wx.adv.CreateFileTipProvider(self.programPath + TIP_FILE,
                                                     int(self.options.getUserOption("tipnumber")) - 1)
         wx.CallAfter(userOptions.handleTips, self, self.TipOfTheDay)
         if DEBUG_LOG:
@@ -3741,7 +3741,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                 item.Enable(toEnable)
         if self.options.getUserOption("difficulty") == "engineer":
             if self.viewSourceItem.GetMenu() is None:
-                self.toolsMenu.AppendItem(self.viewSourceItem)
+                self.toolsMenu.Append(self.viewSourceItem)
                 self.Bind(wx.EVT_MENU, self.onViewSource, self.viewSourceItem)
             self.viewSourceItem.Enable(
                 hasattr(self, 'datastring') and self.datastring is not None and self.datastring != '')

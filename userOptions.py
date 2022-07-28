@@ -64,7 +64,7 @@ def messageIfUpdated(window):
 
 def handleTips(window, tips, asHelp = False):
     if "showtips" not in window.options.options.keys() or window.options.options["showtips"] == "yes" or asHelp:
-        userPref = wx.ShowTip(window, tips, "showtips" not in window.options.options.keys() or window.options.options["showtips"] == "yes" )
+        userPref = wx.adv.ShowTip(window, tips, "showtips" not in window.options.options.keys() or window.options.options["showtips"] == "yes" )
         tipNumber = tips.CurrentTip
         #print "tips were shown, number =", tipNumber
         window.options.options["tipnumber"] = str(tipNumber)
@@ -551,9 +551,9 @@ def saveSizeToOptions(window, options):
     if window.IsMaximized() or window.fullscreen or (core_studio.isMac and window.GetScreenPositionTuple()[1] <= 0):
         options.setUserOption("window-maximized", "True")
         return
-    x, y = window.GetScreenPositionTuple()
-    w, h = window.GetSizeTuple()
-    dims = str([(x, y), (w, h)])
+    pos = window.GetScreenPosition()
+    siz = window.GetSize()
+    dims = str([pos.Get(), siz.Get()])
     options.setUserOption("window-maximized", "False")
     options.setUserOption("window-dims", dims)
 

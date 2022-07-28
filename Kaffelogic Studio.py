@@ -1,4 +1,5 @@
 import wx
+import wx.adv
 import threading
 import os
 import platform
@@ -20,7 +21,7 @@ class mySplash():
     def __init__(self):
         # create, show and return the splash screen
         bitmap = wx.Bitmap(utilities.getProgramPath() + 'splash.png')
-        self._splash = wx.SplashScreen(bitmap, wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT, 0, None, -1, style=wx.BORDER_SIMPLE|wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP)
+        self._splash = wx.adv.SplashScreen(bitmap, wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_NO_TIMEOUT, 0, None, -1, style=wx.BORDER_SIMPLE|wx.FRAME_NO_TASKBAR|wx.STAY_ON_TOP)
         self.start = timer()
         self._splash.Show()
         wx.Yield()
@@ -32,6 +33,8 @@ class mySplash():
             self._splash.HideWithEffect(wx.SHOW_EFFECT_BLEND, 1000)
         except wx.PyAssertionError:
             pass
+        except RuntimeError:
+            return
         self._splash.Destroy()
 
     def destroy(self):
