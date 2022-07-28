@@ -1,0 +1,492 @@
+ambient_temperature
+basic
+°
+The ambient room temperature. This value is normally calculated by the roaster using probe data, but it can also be
+entered by the user (for firmware v 7.5.0+).
+
+back2back_count
+expert
+no unit
+It is recommended that if carrying out multiple roasts in a single session the roaster be left turned on.
+This is to allow the ambient temperature calculation to be performed correctly.
+This number indicates the total number of roasts that have been done since the roaster was last turned on.
+
+calibration_data
+advanced
+no unit
+mains voltage reading, fan speed, cool down speed
+<p>If roasting is uneven fan speed calibration might need to be increased. 
+<p>Cool down speed calibration allows cool down speed to be adjusted to a slightly different value compared to roasting fan speed.
+The recommended value of cool down speed calibration is 1.0 and this is not normally changed.
+<p>Calibration can be changed only in calibration mode (turn roaster on with both - and + buttons held down).
+
+cooldown_hi_speed
+advanced
+RPM
+high speed at start of cooldown to quench roast fast
+<p>Reducing this value is sometimes done to reduce the amount of beans
+in the chaff for dark roasts. Beans are of lower density in darker roasts and more likely to get into the chaff.
+
+cooldown_lo_speed
+advanced
+RPM
+lower speed to use after the initial cooling is complete
+
+cooldown_lo_temperature
+engineer
+°
+temperature at which cooldown changes to low speed
+
+corner1_time_end
+advanced
+min:sec
+At this time the roast control system will go back to using the current gradient as the target gradient. 
+Recommended time is a few seconds after the sharp corner.
+
+corner1_time_start
+advanced
+min:sec
+At this time the roast control system will start using the gradient from the corner end time (corner1 time end) as the target gradient.
+Recommend start is approx 15 secs before the sharp corner.
+
+density_factor
+engineer
+
+development_percent
+basic
+no unit
+The percentage of the roast that took place after first crack. Also known as DTR.
+
+emulation_mode
+engineer
+
+fan_profile
+basic
+
+firmware_version
+basic
+
+colour_change
+basic
+min:sec
+The colour change event (aka dry end) as recorded by the operator during the roast.
+
+first_crack
+basic
+min:sec
+The start of first crack as recorded by the operator during the roast.
+
+first_crack_end
+basic
+min:sec
+The end of first crack as recorded by the operator during the roast.
+
+second_crack
+basic
+min:sec
+The start of second crack as recorded by the operator during the roast.
+
+second_crack_end
+basic
+min:sec
+The end of second crack as recorded by the operator during the roast.
+
+roast_end
+advanced
+min:sec
+The end of the roast. The time when cool down began.
+
+heater_hours    
+basic
+
+heater_power_available
+basic
+
+log_file_name
+basic
+
+mains_voltage
+basic
+
+model
+basic
+
+motor_hours
+basic
+
+native_schema_version
+expert
+no unit
+The highest profile schema version recognized by the firmware. This might be different from the actual version of the profile in use.
+
+power_factor
+engineer
+
+preheat_check_gradient_time
+engineer
+min:sec
+time to start checking for minimum gradient being reached during preheat
+
+preheat_end_detection_count
+engineer
+no unit
+Number of times (seconds) gradient must go down to end preheat stage 1
+
+preheat_heater_percent
+expert
+%
+Actual percent duty cycle of the heater element during preheat stage 1
+
+preheat_max_time
+engineer
+min:sec
+The end of preheat stage 2. This is also the latest time at which preheat stage 1 will end.
+
+preheat_min_power_offset
+engineer
+%
+During preheat stage 2 the roast control system takes over, but reductions in power are limited by this setting.
+It is a percentage reduction. (The preheat power is converted to a percent duty cycle for the heater element, this
+number is subtracted from that to give the minimum percent duty cycle allowed during the second stage of preheat.)
+
+preheat_min_time
+engineer
+min:sec
+The earliest time at which preheat stage 1 will end.
+
+preheat_mode
+engineer
+no unit
+Preheat happens in two stages. This setting affects how the roast control system decides to move from stage 1 to stage 2.
+
+preheat_nominal_temperature
+engineer
+°
+The nominal temperature of air
+entering the roast chamber during pre-heat at the default preheat power and
+ambient temperature [[DEG=20]]°. If preheat power is set to less than
+default, this is adjusted for automatically. <p>This setting affects initial applied pre-heat power, but otherwise
+has no effect on the roast control system.
+
+preheat_power
+basic
+Watts
+This is the amount of heat that is applied to the beans during preheat stage 1.
+This number is vital for initial following of the roast profile curve.
+If this number is too big the roast will start off well above the line and you risk seeing the "Heat too fast" warning.
+If this number is too small the roast will start off well below the line and you risk seeing the "Heat too slow" warning.
+
+preheat_target_in_future
+engineer
+min:sec
+
+preheat_temperature_proximity
+engineer
+°
+number of degrees below profile at which end of preheat stage 1 is triggered in temperature mode
+
+profile_description
+basic
+no unit
+The description should explain the type of beans and roast style that the profile is intended for, and give some guidelines for use.
+ 
+profile_designer
+basic
+no unit
+There is room here for several names to credit a collaborative effort.
+
+profile_file_name
+basic
+
+profile_modified
+basic
+
+profile_schema_version
+expert
+The schema version tells the roaster what minimum firmware version is needed for this profile.
+It may change when you edit the profile settings. It is used by the roaster to
+alert when you have used settings that require a firmware update.
+For more details select <i>File > Properties</i> from the menu.
+
+profile_short_name
+basic
+no unit
+If a short name is given, then it will be used on the display when loading a profile into the roaster. If this is left blank, then the file name is used.
+
+recommended_level
+basic
+Kaffelogic level
+The optimal level for the profile. It will be loaded along with the profile. After the profile is loaded the user is free to set a different level if they choose.
+
+reference_temperature
+engineer
+°
+The internal temperature of the main circuit board
+ 
+roast_end_by_time_ratio
+expert
+no unit
+The level that the user sets determines the point on the profile curve where the roast will end. This point is shown
+as a red square <font color="red">■</font> on the roast profile curve.<p>
+However, if the actual temperature does not follow the curve, the roast ends when the temperature curve crosses the
+threshold line (faint red dotted line). Check the box labelled 'Grid' to see the threshold line.<p>
+The slope of the threshold line is defined by 'roast end by time ratio'.<p><ul><li>
+1.0 means roast ends at that time regardless of temperature. The threshold line is vertical.</li><li>
+0.0 means roast ends at that temperature regardless of the time. The threshold line is horizontal.</li><li>
+Numbers between 0 and 1 set the threshold line at different angles.</li></ul></p><p>
+This allows you to make adjustments so that when a roast does not follow the line it should still finish after approx the same amount of development.
+
+roast_levels
+expert
+°
+This is a series of temperatures that define the thresholds for the roast levels. The first is the temperature for level 0, the next is the temperature for level 1, the next is the temperature for level 2, and so on. The decimal levels (0.1, 0.2, etc) are spread out equally across the interval to the next temperature. 
+<p>You can manipulate these numbers so that actual roast darkness matches the name associated with each number (<i>light</i>, <i>medium</i>, etc) for the particular profile you are developing.  
+
+roast_min_desired_rate_of_rise
+basic
+°/min
+This acts as an anti-stall setting. If the bean temperature races ahead of the profile curve
+this setting acts to prevent the control system stalling the roast in an attempt to get back onto the curve. The minimum rate of rise will be applied
+until eventually the roast gets back onto the curve. 
+<p>This number should always be smaller than the profile curve rate of rise, because the minimum rate of rise will be applied regardless.
+If it is too large it will prevent the system from following the profile curve.
+
+roast_PID_differentialOnError
+engineer
+Boolean
+This affects the way the D term of the PID control system is calculated.
+
+roast_PID_iLimitApplyAtZero
+engineer
+Boolean
+This setting affects the way the I term of the PID control system is calculated, but
+it has no effect if the I gain is set to zero. The I gain should always be set to zero because the
+Kaffelogic 'human logic' system uses a PID control methodology that is de-stabilised by the use of I gain.
+
+roast_PID_Kd
+engineer
+no unit
+The D (differential) gain of the PID control system. If you are familiar with tuning PID temperature control systems you will find this behaves differently
+to the D term you are familiar with.
+
+roast_PID_Ki
+engineer
+no unit
+The I (integral) gain of the PID control system. The I gain should always be set to zero because the
+Kaffelogic 'human logic' system uses a PID control methodology that is de-stabilised by the use of I gain.
+
+roast_PID_Kp
+engineer
+no unit
+The P (proportional) gain of the PID control system. If you are familiar with tuning PID temperature control systems you will find this behaves differently
+to the P term you are familiar with.
+
+roast_PID_max_i
+engineer
+no unit
+This setting affects the way the I term of the PID control system is calculated, but
+it has no effect if the I gain is set to zero. The I gain should always be set to zero because the
+Kaffelogic 'human logic' system uses a PID control methodology that is de-stabilised by the use of I gain.
+
+roast_PID_min_i
+engineer
+no unit
+This setting affects the way the I term of the PID control system is calculated, but
+it has no effect if the I gain is set to zero. The I gain should always be set to zero because the
+Kaffelogic 'human logic' system uses a PID control methodology that is de-stabilised by the use of I gain.
+
+roast_profile
+basic
+
+roast_required_power
+advanced
+Watts
+The power required to correctly follow the profile through the entire roast.
+The roaster advises the user whenever the power available is lower than this value, but will still attempt to roast if started.
+The value is advisory only and does not affect the roast control system in any way.
+<p>Unless you have good data from roast logs you should leave this at its default value.
+
+roast_target_in_future
+engineer
+min:sec
+
+roast_target_timeshift
+engineer
+min:sec
+
+roast_use_prediction_method
+engineer
+Boolean
+
+roasting_level
+basic
+
+specific_heat_adj_lower_temperature_limit
+engineer
+°
+During the drying phase the beans lose water and their specific heat changes dramatically. Consequently the PID parameters Kp and Kd need to change. That change is achieved by multiplying the roast PID Kp and roast PID Kd by specific heat adj multipliers. 
+<p>Below this temperature both multipliers are used at full value. Between this temperature and the upper temperature limit, the multipliers are adjusted linearly until they reach the value of 1.0.
+
+specific_heat_adj_multiplier_Kd
+engineer
+no unit
+
+specific_heat_adj_multiplier_Kp
+engineer
+no unit
+
+specific_heat_adj_upper_temperature_limit
+engineer
+°
+Above this temperature both multipliers = 1.0
+
+tasting_notes
+basic
+no unit
+You might want to add the date, type of beans, weight before and after roasting, as well as tasting notes.
+
+time_jump
+engineer
+
+zone1_boost
+advanced
+(°/min or %)
+The number of °/min added to the desired ROR while in the zone. Use a negative number to decrease the desired ROR. This is used to
+help keep the roast temperature following the profile curve at times when exothermic or endothermic changes are pushing it away. If the temperature
+tends to go below the line use a positive boost; if it goes above the line use a negative boost.
+<p><i>Expert level only:</i> Create a 'power profiling zone' by setting both multipliers to zero. This disables the PID control system within the zone
+and the roaster will not respond to temperature changes at the bean probe. Power during such a zone is controlled by the boost, which defines
+the percent increase in power within this zone. The power increase takes place regardless of the temperature at the bean probe. PID control
+resumes at the end of the zone. A 'power profiling zone' can be used to flatten out parts of the roast where a sequence of exothermic and endothermic changes cause
+the control system to over-react with excessive swings in power and ROR.</p>
+
+zone1_multiplier_Kd
+expert
+no unit
+Kd is the 'derivative' gain of the PID control system. The Kd zone multiplier alters Kd during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone1_multiplier_Kp
+expert
+no unit
+Kp is the 'proportional' gain of the PID control system. The Kp zone multiplier alters Kp during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone1_time_end
+advanced
+min:sec
+Zone 1 ends at this time.
+
+zone1_time_start
+advanced
+min:sec
+Zone 1 starts at this time. 
+
+zone2_boost
+advanced
+(°/min or %)
+The number of °/min added to the desired ROR while in the zone. Use a negative number to decrease the desired ROR. This is used to
+help keep the roast temperature following the profile curve at times when exothermic or endothermic changes are pushing it away. If the temperature
+tends to go below the line use a positive boost; if it goes above the line use a negative boost.
+<p><i>Expert level only:</i> Create a 'power profiling zone' by setting both multipliers to zero. This disables the PID control system within the zone
+and the roaster will not respond to temperature changes at the bean probe. Power during such a zone is controlled by the boost, which defines
+the percent increase in power within this zone. The power increase takes place regardless of the temperature at the bean probe. PID control
+resumes at the end of the zone. A 'power profiling zone' can be used to flatten out parts of the roast where a sequence of exothermic and endothermic changes cause
+the control system to over-react with excessive swings in power and ROR.</p>
+
+zone2_multiplier_Kd
+expert
+no unit
+Kd is the 'derivative' gain of the PID control system. The Kd zone multiplier alters Kd during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone2_multiplier_Kp
+expert
+no unit
+Kp is the 'proportional' gain of the PID control system. The Kp zone multiplier alters Kp during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone2_time_end
+advanced
+min:sec
+Zone 2 ends at this time.
+
+zone2_time_start
+advanced
+min:sec
+Zone 2 starts at this time.
+
+zone3_boost
+advanced
+(°/min or %)
+The number of °/min added to the desired ROR while in the zone. Use a negative number to decrease the desired ROR. This is used to
+help keep the roast temperature following the profile curve at times when exothermic or endothermic changes are pushing it away. If the temperature
+tends to go below the line use a positive boost; if it goes above the line use a negative boost.
+<p><i>Expert level only:</i> Create a 'power profiling zone' by setting both multipliers to zero. This disables the PID control system within the zone
+and the roaster will not respond to temperature changes at the bean probe. Power during such a zone is controlled by the boost, which defines
+the percent increase in power within this zone. The power increase takes place regardless of the temperature at the bean probe. PID control
+resumes at the end of the zone. A 'power profiling zone' can be used to flatten out parts of the roast where a sequence of exothermic and endothermic changes cause
+the control system to over-react with excessive swings in power and ROR.</p>
+
+zone3_multiplier_Kd
+expert
+no unit
+Kd is the 'derivative' gain of the PID control system. The Kd zone multiplier alters Kd during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone3_multiplier_Kp
+expert
+no unit
+Kp is the 'proportional' gain of the PID control system. The Kp zone multiplier alters Kp during the zone. This allows the control system to be fine tuned
+within a zone. This is a multiplier and has no effect at the default value of 1.
+
+zone3_time_end
+advanced
+min:sec
+Zone 3 ends at this time.
+
+zone3_time_start
+advanced
+min:sec
+Zone 3 starts at this time.
+
+ambient_cutoff_reference
+engineer
+°
+part of the roaster preferences: reference temperatures above this are not to be treated as ambient
+
+ambient_cutoff_probe
+engineer
+°
+part of the roaster preferences: probe temperatures above this are not to be treated as ambient
+
+ambient_cutoff_difference
+engineer
+°
+part of the roaster preferences: if reference and probe are further apart than this
+then probe is not to be treated as ambient
+
+ambient_default_temperature
+engineer
+°
+part of the roaster preferences: if ambient temperature cannot be determined, this value is used as ambient
+
+cooldown_end_temperature
+engineer
+°
+part of the roaster preferences: cool down ends at this probe temperature if roast did not complete, e.g. for an empty test roast
+
+cooldown_end_ror_1st
+engineer
+°/min
+part of the roaster preferences: cool down ends at this ROR if this is the first roast after power on
+
+cooldown_end_ror_b2b
+engineer
+°/min
+part of the roaster preferences: cool down ends at this ROR if this is a back-to-back roast after power on
+
+cooldown_slow_time
+engineer
+secs
+part of the roaster preferences: fan speed starts dropping after this many seconds of cool down

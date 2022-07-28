@@ -1,0 +1,390 @@
+Release notes for Kaffelogic Profile Management Studio
+
+Current release version 4.3.5.1 released 1 October 2021
+
+version 4.4.0-beta
+	- new feature: supports Fahrenheit 
+
+version 4.3.5.1 released 1 October 2021
+	- new feature: zone and corners can be made visible on log and profile tabs, and in comparisons 
+	- improvement: new file format supported for Ikawa CSV file import 
+	- improvement: improved workflow for Ikawa CSV file import
+	- new feature: splash screen while loading
+        - bugfix: export PDF now supports unicode characters in roast notes and profile descriptions
+
+version 4.3.2-beta
+    - new feature: fan speed can be made visible on log and profile tabs
+    - new feature: compare files can show all log lines, including fan speed, according to options setting
+    - new feature: roast events now visible when comparing logs
+    - improvement: legend and check boxes improved labelling and workflow
+    - improvement: restore default window when otherwise restored window would be off screen
+    - bugfix: Cropster Import feature: cope with incomplete gas comments sheet in Cropster file, identify and import Cropster roast end
+
+version 4.2.11.2 released 8 July 2021
+    - minor bugfix affecting hover text in settings tab (Windows only)
+
+version 4.2.11.1 released 7 July 2021
+    - improved thread management (resulting in faster app shutdown)
+	
+version 4.2.11-beta
+    - new feature: automatic memory stick backups of profiles and logs
+    - new feature: save and load temperature conversion envelopes as files
+    - make units clearer for AUC calculator by adding a multiplication sign between deg and min
+    - support back2back count in log files
+    - indicate firmware version 7.5.0
+    - minor layout fix to Linux version, some widgets were slightly too narrow for their contents
+    - minor improvement to removable drive detection in Windows, no functional change under Windows 10
+
+version 4.2.9 released 10 February 2021
+    - new menu option: new app window
+
+version 4.2.8-beta
+    - indicate schema version 1.7 when using power profiling in zone 3 (previously zone 3 could not use power profiling)
+    
+version 4.2.7-beta
+    - fix bug in fan profile tab when clicking in the curve
+
+version 4.2.6-beta
+    - improvement: enhance Help menu with extra links to Documentation and Community
+    - improvement: display phase data in information labels when viewing logs
+
+version 4.2.5-beta
+    - bugfix: allow short name to consist of digits only
+    - bugfix: fix bug where open log, followed by open profile, followed by edit options, gave error. Same error happened if options changed in a different window followed by edit options.
+    - improvement: display phase data in information labels when editing a roast profile
+    - improvement: enhance missing roast levels message to make it clear that expert level or above is needed
+    - improvement: validate that times are in min:sec format (no longer accept plain seconds)
+    - improvement: validate that zone ends come after zone starts
+
+version 4.2.4 was released 7 October 2020
+summary of changes between 4.2.4 and previous release (4.1.2 03-June-2020)
+
+    - new features:
+	- new 'Core profiles' tab on the 'View memstick' tool
+	- new 'Expert' difficulty level, making it easier to work with some of the more advanced features while still hiding the more arcane settings
+	- new export PDF option
+    - improvements:
+	- display end by time ratio as a sloping line on the profile curve, clearly indicating where the roast will end if it doesn't follow the profile curve exactly
+	- include the phases panel in the 'Capture and save' tool
+    - bugfixes: 
+	This version also contains a number of minor bugfixes and improvements, especially relevant if you use the import feature (especially Sonofresco), or the Linux version.
+
+version 4.2.4-beta
+	- bugfix: display hovers correctly for preferences data in log files
+	- improvement: better message when saying that firmware update is recommended
+	
+version 4.2.3-beta
+	- bugfix: Sonofresco export verification now tolerates rate of rise of 1.9 deg C per min
+	- improvement: Sonofresco import/export now finds alternative location of ADR profiles
+
+version 4.2.2-beta
+	- new feature: export PDF
+	- improvement: Mac only, better full screen and tab management, indicate modified file in close button
+
+version 4.2.1-beta
+    - improvement: display recommended roast end as actual threshold line, so 'end by ratio' becomes visible
+    - improvement: add a new 'expert' difficulty level to make it easier to avoid touching the true engineer settings
+    - improvement: add phases panel to 'Capture and save image' tool
+    - improvement: control the second derivative line with an option instead of difficulty
+    - improvement: better error handling and layout of core profile download tab
+    - improvement: recognise FAT16 memory stick as well as FAT32 (Windows and Mac) 
+
+version 4.2.0-beta
+    - new feature: core profiles tab added to the view memstick tool
+    
+version 4.1.3-beta
+    - bugfix: critical: Import feature was failing in some cases, now made more resilient
+    - bugfix: Fix obscure division by zero error in AUC calculator
+    - bugfix: Linux only, Fix memstick icon not showing in toolbar for Ubuntu 20
+    - bugfix: Mac only, Fix paste temperature conversion envelope from text document not working on Mac  
+    - improvement: Linux only, increase width of text boxes in phases panel for Ubuntu 20
+    - improvement: increase width of text boxes in time calculator
+    - improvement: getting firmware file list made more resilient to unexpected removal of memstick
+
+summary of changes between 4.1.2 and previous release (4.0.4 10-March-2020)
+    - new features:
+	    - support for new firmware features in firmware v7.4.5 (three zones, power profiling)
+    - bugfixes: 
+	    - import Cropster: prevent blank event data from causing issues
+    - improvements:
+        - recommended level: now shows the description as well as the number
+        - multiple file compare: now easier to add files to the comparison set
+        - profile schema version: now handled automatically to make profiles more easily compatible with older firmware
+        - check for updates: added a check for firmware updates as well as the check for software updates
+        - memory sticks: improved recognition of memory sticks (ignoring SD cards and external drives, better description of unlabelled memory sticks)
+        - user interface: fix some display glitches and responsiveness particularly on the Mac
+        - import/export Sonofresco: add a 15sec time shift to align with what Sonofresco ADR does
+        - Windows: changes made to options are now applied to all Studio windows when multiple windows are in use
+        - Linux: we now have a Linux installer that looks after updates and file suffix associations
+
+version 4.1.2-beta
+    - bugfix: suppress error message if Internet not available on program launch
+    - improvement: watchdog implemented for Mac detection of memory stick, improves reliability
+    - improvement: fixed phases panel layout issue with graph point labels, and remove some unwanted white space from view memstick panel 
+
+version 4.1.1-beta
+    - bugfix: saving recommended level (profiles saving, but not saving recommended level)
+    - bugfix: incorrect text display for level 1.0 (displayed 'very light' when should be 'light')
+
+version 4.1.0-beta
+    - add level descriptions to recommended level
+    - addition of a third zone
+    - support for power profiling
+    - supports schema version 1.6 and firmware version 7.4.5
+    - schema versions now handled automatically, no ability for user to set them
+    - Sonofresco import now looks at correct default location
+    - better dialog behaviour on Mac (some dialogs were needing to be explicitly closed)
+    - improved display of safe to remove message on Mac
+    - improved restore window to size on opening on Mac
+    - compare files now allows comparisons to be added one at a time
+    - fix bug in DTR display in Sonofresco mode
+    - fix bug in hover text formatting if long word and multiple files compared
+    - improved management of files and options when more than one instance is open (Windows and Linux)
+    - fix bug when only one profile point
+
+version 4.0.7-beta
+    - check for firmware updates as part of check for updates
+    - time shift when importing and exporting Sonofresco profiles - adjust by 15 secs to allow for strange Sonofresco ADR behaviour
+    - implement user can set Sonofresco file location
+    - improved recognition of memory stick (don't recognise unless it is USB and FAT32, avoids annoying recognition of SD Cards, Removable Hard Drives, etc)
+    - improve handling of unnamed memory stick under Linux
+    - use urllib3 for Internet connections (to avoid some problems accessing Internet on Mac)
+    - further improvement to UI for arrow keys
+
+version 4.0.6-beta
+    - improved system for disabling type-ahead when using arrow keys for profile editing, now works cross platform
+
+version 4.0.5-beta
+    - fix Cropster import bug where blank event data was causing errors
+    - manage standard axes better to avoid showing too much cool down on long cooling
+    - disable type-ahead when using arrow keys for profile editing - use Atl key for fast moving when using arrow keys for profile editing
+    - preserve event data when refreshing log data on options change
+    - add preferences to support extended cooling
+
+summary of changes between 4.0.4 and previous release (3.2.4 19-Dec-2019)
+    - name change from 'Kaffelogic Profile Management Studio' to 'Kaffelogic Studio'
+    - new features:
+        - automatic check for updates
+        - Ikawa CSV, Artisan JSON, Cropster XLS import
+        - auto removal of turning point when importing a profile
+        - Artisan JSON export
+        - support Catalina (Mac OS)
+        - Area under the curve (AUC) tool
+        - Compare multiple files at once
+        - options: RoR multiplier and RoR smoothing - to help with analyzing logs
+    - improvements:
+        - better validation of profiles when saving
+        - better handling of default directory on Mac and Linux
+        - some user interface improvements including improved zooming with a trackpad
+
+version 4.0.4 released 10 March 2020
+    - fix bug where editing options sometimes generates an error if currently editing a profile after previously viewing a log
+    - edit hint text (hovers) for corners to line up with the advice in Roaster's Companion
+
+version 4.0.3 beta
+    - minor improvements:
+        - fix Artisan invalid JSON unicode encoding issue
+        - change title of extract menu to "Import" when importing
+        - ensure that empty and broken log lines are tolerated
+        - update menu when changing tab to give validation message
+        - minor edit to text on the time calculator buttons
+        - log now properly supports log data scaling of 0.1 and smaller (rarely encountered)
+        - fix JSON export time issues, some times were out by typically several seconds, and CSV date issues
+        - support USB drives with no volume name on MacOS (fully supported in Windows, still not supported on Linux - Linux users must name their memory sticks)
+        
+version 4.0.2 beta
+    - new features:
+        - implement Artisan JSON import/export
+        - implement Cropster import
+        - implement area under the curve tool
+        - implement multi-file compares
+        - allow setting of size when capturing image
+    - minor improvements:
+        - keep save button active if undo all edits after saving
+        - correctly support RoR multiplier for old style log files
+        - disable transform menu item when transform is not available in settings tab
+        - improve behaviour of import/export dialogs
+        - improve Sonofresco export validation messages
+
+version 4.0.1 beta
+    - minor improvements:
+    	- suppress windows error log file
+    	- minor improvements to import Artisan and Ikawa
+
+version 4.0.0 beta
+    - new features:
+        - name change from 'Kaffelogic Profile Management Studio' to 'Kaffelogic Studio'
+    - minor improvements:
+        - handling of default folder improved on Mac and Linux
+    - bugfixes:
+        - fix Catalina issues making the software Catalina-ready
+
+version 3.3.6 beta
+    - bugfixes:
+        - refactor changing directory to root on Mac to support new Catalina conventions
+    - minor improvements:
+        - tidy up some underscores in labels
+        - improve roast end detection in import Ikawa
+        - improve klog saving after import Ikawa
+
+version 3.3.5 beta
+    - bugfixes:
+        - unicode encoding of user volume name in Mac version
+
+version 3.3.4 beta
+    - bugfixes:
+        - unicode encoding of user volume name in Mac version
+        - display 'K-logic classic' as as short name when profile does not have a 'profile_short_name' element (very obscure edge case)
+    - improvement: improved handling of hidden files in view memory stick
+
+version 3.3.3 beta
+    - new features:
+        - implement Ikawa CSV import
+        - implement auto removal of turning point when importing a profile from CSV
+        - new options: RoR multiplier, RoR smoothing, and Legend font size
+    - improvements:
+        - sanity check control points so they can't cause infinite gradients
+        - improve smoothing of first and last points in unusual cases
+        - report OSX versions correctly 
+        - fix up calculation of recommended endpoint in cases where profile approaches flat or negative slope
+        - implement unusable levels recommendation when validating profiles
+        - implement fan speed validation when validating profiles
+        - improve setting of axes in profile editing tab
+        - allow user to disable automatic check for updates
+    - bug fixes:
+        - allow temperature conversion envelope to contain only one point
+        - always reset selection to first point on new file
+    
+version 3.3.0.2 beta
+    - enhancement: improved method for limiting zooming to 5 events per second
+
+version 3.3.0.1 beta
+    - new option setting: allow user to disable zooming by mouse wheel and scroll gesture via options (necessary for some trackpads/mice)
+    - enhancement: limit zooming by mouse wheel to 5 events per second 
+    - enhancement: when giving message if updated, say 'rolled back' if version number has gone down 
+
+version 3.3.0 beta
+    - new feature: check for updates on program launch, and in About box
+    - new feature: check for firmware updates and download them to memory stick, in the View Memory Stick tool
+    - enhancement (Mac only): improve the method for detecting removable drive changes to avoid freezing the GUI
+ 
+version 3.2.4 released 19 December 2019
+    - fix bug that prevents entering new colour change and first crack data into a log where no times were marked during the roast
+
+version 3.2.3
+    - allow user to edit and save first crack and colour change values in log file
+    - add ability to view logs as well as profiles with view memory stick button
+    - fix scale for RoR and temperature so that they are always the same value (1.0) when graphing a log
+
+version 3.2.2
+    - new feature: properties menu item allows converting between profile schema versions
+    - new option setting: default 'colour change' and 'first crack' temperatures, to be used when there is no data in the profile file
+    - enhancement: allow merge to import 'about this' tab, 'colour change' and 'first crack data'
+    - enhancement: allow zones and corners to be merged separate from other settings
+    - enhancement: advise user if long file name will be truncated when loading into roaster
+    - enhancement: 'colour change', 'first crack', and 'recommended level' changes can now use undo/redo
+    - bug fix: prevent short name from being blank in schema version 1.4
+    - bug fix: support unicode characters in file names in 'view memory stick'
+
+version 3.2.1
+    - new feature: calculate and display roast phases for the log tab, allow them to be extracted to the profile
+    - new feature: merge profile (tools menu) allows merging just one curve from a profile e.g. fan curve, into the current edit session
+    - new feature: time calculator (tools menu) 
+    - improvement: store phases data in the profile file (profile schema version 1.5.1 - updated firmware not required)
+    - improvement: better recognition of CtrlAlt+ 
+    - improvement: warn if using default profile name for a user profile
+    - bug: fix truncation of recent files list
+    - bug: fix minor issue with restore of the options panel on the log tab
+    - deprecated feature: development time calculator has been removed
+
+version 3.2.0
+    - new feature: calculate and display roast phases for the profile curve
+    - new feature: recent files list to allow quickly re-opening files
+    - improvement: fully support unicode in file names
+    - improvement: remember the last used folder between sessions
+    - improvement: user now has option to put the USB button at the bottom or the top of the screen
+    - improvement: USB drives are now better handled if starting Studio with more than one removable drive already connected
+    - improvement: window size is restored on re-opening the app
+
+version 3.1.5 released 23 September 2019
+    - bugfix: Sonofresco export issue (variable name not found)
+    
+version 3.1.4
+    - new feature: use temperature envelope for temperature conversion when importing and exporting
+    - new feature: view source (engineer only)
+    - improve Transform: values are retained between uses, can be applied to zones and corners
+    - improve removable drive handling
+    - detect empty log files
+    
+version 3.1.3
+    - enhanced compare feature (now includes profile settings)
+    - new feature: compare to default profile 
+    - fix to temperature conversion routines
+    - add event temperature entry to import/export Sonofresco
+    - improvement to behaviour of 'Save a copy to USB' button
+    - allow decimal point to end number in roast levels string
+    - fix minor bug in line width display updating
+    
+version 3.1.2
+    - new tool: compare
+
+version 3.1.1
+    - new feature: providing recommendations to assist setting preheat power and min rate of rise correctly
+
+version 3.1.0
+    - new feature: display of roast events recorded in the log: colour change, first crack start/end, second crack start/end, roast end
+    - new feature: import/export Artisan CSV
+    - new feature: 'Smooth all' command in Draw menu
+    - improvements to user interface
+        - if a profile point is moved on top of another point they are merged into one point
+        - yellow controls cannot now be dragged to create 'impossible' curves
+        - 'Smooth point' now works for first and last points of the curve
+        - first profile point cannot be moved away from t=0 secs
+        - development time calculator now uses actual times recorded in the log
+        - display graph labels without underscores
+        - expand the standard log x-axis when the line goes off the right edge
+        - restrict the profile x-axis so that it does not parts of the line in negative time
+        - expand the fan profile x-axis to match the temperature profile x-axis
+        - transform dialog uses 'RPM' instead of 'Temperature' if transforming the fan profile curve
+        - alert user to short name on 'Save as'
+        - slight improvement to scaling of log lines
+
+version 3.0.0
+    - three difficulty levels implemented which allow fewer items displayed in about/settings tabs reducing clutter
+    - startup tips added, also in help menu
+    - help menu now has support page link
+    - hints appear when mouse over about/settings labels
+    - option to alter line thickness
+    - new "capture screenshot" feature
+    - only show second derivative curve in engineer mode
+    - slight change to improve consistency of colours
+    - give user reassuring message after they have updated the software
+    - display about/settings labels without underscores
+    - remove trailing decimal point/zero from settings that are actually integer
+    - limit length of designer name to match firmware limit
+
+version 2.3.7
+    - improved user interface
+	- display first crack in log graph view
+    	- allow short name to be blank, in which case the file name will be used for display on the roaster (this is made possible by firmware changes in firmware v 7.3.5 and therefore requires a firmware update)
+    	- allow copy and paste from error message dialog
+    	- show calibration data in log files (this supports firmware changes in firmware v 7.3.5)
+    - bug fixes
+    	- skip hidden files when showing all profiles on the memory stick (Mac computers create hidden files that were causing error messages)
+    	- save file dialog now uses file name, not full path name (this was especially irritating on the Mac)
+    	- handle incorrect UTF-8 encoding in a file gracefully
+
+version 2.3.6.1
+    - fix an issue on Linux with saving profiles - add file suffix automatically if user does not add it
+
+version 2.3.6
+    - improved user interface
+    	- reorganise menus, adding a tools menu
+	- limit values for ROR and 2nd derivative to avoid insanely large Y-axis
+    	- show mins and secs for times in the about and setting tabs (previously they were shown as seconds)
+	- unicode characters not accepted in short name
+   - new features
+	- development time calculator (in the tools menu)
+    	- unicode characters accepted in notes and descriptions
+    	- Linux version built on Ubuntu 18.04.2 LTS 64-bit
+

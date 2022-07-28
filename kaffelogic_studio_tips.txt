@@ -1,0 +1,16 @@
+Transfer profiles to your Nano 7 by saving them on a memory stick. Then plug the memory stick into your Nano 7 and use the Nano 7 profile button to load them.
+If you have opened a profile in Kaffelogic Studio and you want to use it for roasting, put a memory stick into your computer. A save button will appear at the bottom right of the screen and you can save to the memory stick with a single click.
+Use the memory stick icon (at the top of the screen) to get a detailed view of all the profiles saved on your memory stick.
+Leave the memory stick in the Nano 7 while roasting and it will save a log.
+When viewing a log, switch to the "About this file" tab to enter details like date, bean origin, batch weight, and tasting notes.
+Click on a log or profile line at any point to see the exact value at that point. That point will then be kept at the centre of the screen when you zoom in.
+Kaffelogic Studio starts up with the default profile. When you select "File > New" it gives you a new copy of the default profile.
+If you want to start designing a profile with a blank screen you can delete most of the points from the default profile and then insert your own points. However it is usually easier to just move the existing points of the default profile.
+You can drag profile points (blue points) with your mouse, or enter their values directly in the boxes at the bottom left of the screen.
+The yellow handles allow you to alter the smoothness of the curve, but usually you will just use "Smooth point". You only need to drag the yellow handles if you require fine adjustment.
+The red marker shows the recommended point where the roast will end. This is defined by the "Recommended level". You should choose the recommended level that gives the best result for your profile.
+The recommended level will load when the profile loads. The user is free to alter the level after that. 
+If the mouse gets away on you and you make a mess of the curve, the Undo feature will put things right.
+See more advanced settings by using the Options menu to turn up the Difficulty.
+If you have a log for a roast that you want to replicate, you can extract the profile from the log using "File > Extract profile from log". Then save and load the profile into the Nano 7.
+All profiles and logs on your memory stick are automatically backed up by Kaffelogic Studio when you put your memory stick in the computer. You can find these backups with "Tools > Explore memory stick backups..."

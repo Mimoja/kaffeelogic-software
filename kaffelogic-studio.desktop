@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Terminal=false
+Exec="/opt/kaffelogic-studio/Kaffelogic Studio"
+Name=Kaffelogic Studio
+Icon=/opt/kaffelogic-studio/one-bean.png
+MimeType=application/x-klog;application/x-kpro;
+Categories=Viewer;Office;
+

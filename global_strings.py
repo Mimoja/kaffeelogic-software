@@ -1,0 +1,14 @@
+# coding:utf-8
+
+PROGRAM_NAME = 'Kaffelogic Studio'
+PROGRAM_SHORTNAME = 'Studio'
+PROGRAM_FORMERLY_KNOWN_AS = 'Kaffelogic Profile Management Studio'
+PROGRAM_VERSION = '4.4.1'
+FULL_MODEL_NAME = 'Kaffelogic Nano 7'
+MODEL_NAME = 'Nano 7'
+MODEL_NUMBER = 'KN1007B'
+DESIGNED_FOR_FIRMWARE_VERSION = '7.5.0'
+DESIGNED_FOR_PROFILE_SCHEMA_VERSION = '1.7'
+COPYRIGHT = u'\xA9 2021 Kaffelogic Ltd'
+
+DEBUG_MACEVENTS = False
