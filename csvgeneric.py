@@ -3,8 +3,8 @@ import re, wx, datetime, os, copy, json
 import temperature, cropster, bezier, PathFitter, kaffelogic_studio_defaults, utilities, core_studio
 
 ARTISAN = 'Artisan'
-CROPSTER = u'Cropster'
-IKAWA = u'Ikawa™'
+CROPSTER = 'Cropster'
+IKAWA = 'Ikawa™'
 IKAWA_DEFAULT_FAN_RPM_AT_100_PERCENT = '21000'
 IKAWA_DEFAULT_FAN_STALL_PERCENT = '0'
 
@@ -18,7 +18,7 @@ def specialArtisanJsonEncoding(text):
 def specialArtisanJsonDecoding(text):
     """
     Artisan double encodes the \ character when saving JSON, and then double decodes on import.
-    Artisan also saves unicode characters as \x99 instead of the JSON standard \u9999 so this is also addressed here.
+    Artisan also saves unicode characters as \x99 instead of the JSON standard \\u9999 so this is also addressed here.
     """
     return text.replace(r'\\x', r'\\u00').replace('\\\\', '\\')
 
@@ -224,7 +224,7 @@ def translateKaffelogicEventSetToArtisan(event_names, event_points, offset, temp
         JSON_indexed_times["Charge"] = offset
     for i in range(len(event_names)):
         header_name = event_translation_for_header[event_names_translated[i]] if event_names_translated[
-                                                                                     i] in event_translation_for_header.keys() else \
+                                                                                     i] in list(event_translation_for_header.keys()) else \
         event_names_translated[i]
         artisan_name = event_names_translated[i]
         adjust = -2 if header_name == "DROP" and temperature_column_name == 'temp' else 0  # make up for fact that smoothing causes the mean temp to drop earlier than true roast end, but only
@@ -243,9 +243,9 @@ def makeArtisanCSVHeaders(date, extras=None, CSV_header_events=None, offset=0):
         CSV_header_events = {}
     header1 = "Date:{}\tUnit:{}\tCHARGE:\tTP:\tDRYe:\tFCs:\tFCe:\tSCs:\tSCe:\tDROP:\tCOOL:\tTime:".format(
         date.replace('/', '.'), temperature.getTemperatureUnit())
-    for name in CSV_header_events.keys():
+    for name in list(CSV_header_events.keys()):
         header1 = header1.replace(name + ":", name + ":" + CSV_header_events[name])
-    if 'CHARGE' not in CSV_header_events.keys():
+    if 'CHARGE' not in list(CSV_header_events.keys()):
         header1 = header1.replace("CHARGE:", "CHARGE:" + utilities.toMinSec(offset, True))
     header1 = header1.replace("CHARGE:00:00", "CHARGE:00:01")  # Artisan will ignore events with time value of zero
     header2 = "Time1\tTime2\tBT\tET\tEvent"
@@ -264,7 +264,7 @@ def translateEventKaffelogicToArtisan(e):
         "roast_end": "Drop"
     }
     e = utilities.replaceSpaceWithUnderscore(e)
-    return event_translation[e] if e in event_translation.keys() else e
+    return event_translation[e] if e in list(event_translation.keys()) else e
 
 
 def translateEventArtisanToKaffelogic(e):
@@ -276,7 +276,7 @@ def translateEventArtisanToKaffelogic(e):
         "SCe": "second_crack_end",
         "Drop": "roast_end"
     }
-    return event_translation[e] if e in event_translation.keys() else e
+    return event_translation[e] if e in list(event_translation.keys()) else e
 
 
 def make_JSON_object(include_extras, notes, events, roastisodate, times, temp1, temp2, extra1, extra2):
@@ -349,7 +349,7 @@ def make_JSON_object(include_extras, notes, events, roastisodate, times, temp1, 
         obj["extratemp2"] = [extra2]
     if not events is None:
         JSON_computed_times, JSON_indexed_times = events
-        for name in JSON_computed_times.keys():
+        for name in list(JSON_computed_times.keys()):
             if name.lower() != "charge": obj["computed"][event_translation[name]] = JSON_computed_times[name]
             event_time = JSON_indexed_times[name]
             event_time_indexes = [ti for ti in range(len(times)) if times[ti] >= event_time]
@@ -360,10 +360,10 @@ def make_JSON_object(include_extras, notes, events, roastisodate, times, temp1, 
 
 def artisanJsonToKlog(obj, filename, is_profile, envelopeFn):
     unit = obj["mode"]
-    model = obj["roastertype"] if "roastertype" in obj.keys() and obj["roastertype"] != "" else "JSON file"
-    date = obj["roastisodate"] if "roastisodate" in obj.keys() else ""
-    description = obj["roastingnotes"] if "roastingnotes" in obj.keys() else ""
-    notes = obj["cuppingnotes"] if "cuppingnotes" in obj.keys() else ""
+    model = obj["roastertype"] if "roastertype" in list(obj.keys()) and obj["roastertype"] != "" else "JSON file"
+    date = obj["roastisodate"] if "roastisodate" in list(obj.keys()) else ""
+    description = obj["roastingnotes"] if "roastingnotes" in list(obj.keys()) else ""
+    notes = obj["cuppingnotes"] if "cuppingnotes" in list(obj.keys()) else ""
     both = notes + '\n' + description + '\n' + "Imported from JSON file"
     date = date.split('-')
     if len(date) == 3:
@@ -389,10 +389,10 @@ def artisanJsonToKlog(obj, filename, is_profile, envelopeFn):
         if name != "" and index > 0:
             settings += "\n" + name + ":" + str(timestamp)
     header = 'time\tBT\t=ET'
-    extra1name = obj["extraname1"][0] if "extraname1" in obj.keys() else None
-    extra2name = obj["extraname2"][0] if "extraname2" in obj.keys() else None
-    extra1temp = obj["extratemp1"][0] if "extratemp1" in obj.keys() else None
-    extra2temp = obj["extratemp2"][0] if "extratemp2" in obj.keys() else None
+    extra1name = obj["extraname1"][0] if "extraname1" in list(obj.keys()) else None
+    extra2name = obj["extraname2"][0] if "extraname2" in list(obj.keys()) else None
+    extra1temp = obj["extratemp1"][0] if "extratemp1" in list(obj.keys()) else None
+    extra2temp = obj["extratemp2"][0] if "extratemp2" in list(obj.keys()) else None
     if not extra1name is None: header += '\t#' + utilities.replaceSpaceWithUnderscore(extra1name)
     if not extra2name is None: header += '\t#' + utilities.replaceSpaceWithUnderscore(extra2name)
     body = ''
@@ -544,7 +544,7 @@ def ikawaToKlog(ikawa, filename, is_profile, converter, convert_fan, RPM_at_100_
         columnNames = columnNamesTypeB
     else:
         message = "CSV format not recognised.<br />Please send <b>" + filename + "</b> to Kaffelogic support for analysis."
-        raise(UnknownDataFormat(message))
+        raise UnknownDataFormat
     columnHeader = '\t'.join([x[0] for x in columnNames])
     accessnames = [x[1] for x in columnNames]
     output = []
@@ -585,11 +585,11 @@ class importExportDialog(wx.Dialog):
         self.parent = parent
         self.isImport = isImport
         if self.CSVType == ARTISAN:
-            optionType = u"artisan"
+            optionType = "artisan"
         elif self.CSVType == CROPSTER:
-            optionType = u"cropster"
+            optionType = "cropster"
         elif self.CSVType == IKAWA:
-            optionType = u"ikawa"
+            optionType = "ikawa"
         self.optionType = optionType
         box = wx.BoxSizer(wx.VERTICAL)
         self.box = box
@@ -613,7 +613,7 @@ class importExportDialog(wx.Dialog):
 
         if self.CSVType == ARTISAN and not isImport:
             formatBox = wx.BoxSizer(wx.HORIZONTAL)
-            formatBox.Add(wx.StaticText(self, -1, u"File format"), 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
+            formatBox.Add(wx.StaticText(self, -1, "File format"), 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
             self.radioFormatCSV = wx.RadioButton(self, style=wx.RB_GROUP, label="CSV", name="CSV")
             self.radioFormatJSON = wx.RadioButton(self, label="JSON", name="JSON")
             formatBox.Add(self.radioFormatCSV, 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
@@ -627,7 +627,7 @@ class importExportDialog(wx.Dialog):
 
         if isImport:
             self.mergeBox = wx.BoxSizer(wx.VERTICAL)
-            self.mergeFromFileCheckBox = wx.CheckBox(self, -1, u"Merge with " + (
+            self.mergeFromFileCheckBox = wx.CheckBox(self, -1, "Merge with " + (
                 "fan profile and " if self.CSVType != IKAWA else "") + "settings from")
             self.mergeBox.Add(self.mergeFromFileCheckBox, 0,
                               wx.LEFT | wx.TOP | wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, 10)
@@ -644,7 +644,7 @@ class importExportDialog(wx.Dialog):
             box.Add(self.mergeBox, flag=wx.TOP, border=10)
 
         box.AddSpacer(10)
-        optionName = u"kaffelogic/" + optionType + "_envelope_temperatures"
+        optionName = "kaffelogic/" + optionType + "_envelope_temperatures"
         box.Add(temperature.widget(self, parent, self.suffixes, optionName, optionType, None, self.envelopeApplier).box)
         if self.CSVType == IKAWA:
             box.Add(wx.StaticText(self, -1, "Fan speed conversion"), 0, wx.LEFT | wx.TOP | wx.BOTTOM | wx.ALIGN_LEFT, 10)
@@ -653,7 +653,7 @@ class importExportDialog(wx.Dialog):
             self.convert_fan_speed.SetValue(enabled)
             box.Add(self.convert_fan_speed, 0, wx.LEFT | wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, 10)
             RPM_100percent_box = wx.BoxSizer(wx.HORIZONTAL)
-            label = wx.StaticText(self, -1, u"Kaffelogic RPM equivalent to Ikawa fan 100%")
+            label = wx.StaticText(self, -1, "Kaffelogic RPM equivalent to Ikawa fan 100%")
             self.RPM_100percent = wx.TextCtrl(self, -1, self.parent.options.getUserOption("kaffelogic/ikawa_fan_100%",
                                                                                           IKAWA_DEFAULT_FAN_RPM_AT_100_PERCENT),
                                               size=(60,-1))
@@ -661,7 +661,7 @@ class importExportDialog(wx.Dialog):
             RPM_100percent_box.Add(label, 0, wx.TOP | wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, 10)
             box.Add(RPM_100percent_box, 0, wx.LEFT | wx.RIGHT | wx.ALIGN_LEFT, 10)
             Ikawa_stall_percent_box = wx.BoxSizer(wx.HORIZONTAL)
-            label = wx.StaticText(self, -1, u"% Ikawa fan equivalent to zero Kaffelogic RPM")
+            label = wx.StaticText(self, -1, "% Ikawa fan equivalent to zero Kaffelogic RPM")
             self.Ikawa_stall_percent = wx.TextCtrl(self, -1, self.parent.options.getUserOption("ikawa_fan_stall%",
                                                                                           IKAWA_DEFAULT_FAN_STALL_PERCENT),
                                               size=(60,-1))
@@ -675,7 +675,7 @@ class importExportDialog(wx.Dialog):
             self.checkExtras.SetValue(
                 self.parent.options.getUserOptionBoolean(self.optionType + "_export_extras_on", default=False))
             self.settingsadvice = wx.StaticText(self, -1,
-                                                u"Extra data in a CSV file will import into Artisan better if you\nalso load settings file kaffelogic-artisan-settings.aset")
+                                                "Extra data in a CSV file will import into Artisan better if you\nalso load settings file kaffelogic-artisan-settings.aset")
             box.Add(self.settingsadvice, 0, wx.ALL | wx.ALIGN_LEFT, 10)
         buttons = wx.BoxSizer(wx.HORIZONTAL)
         importButton = wx.Button(self, label=self.verb)
@@ -739,7 +739,7 @@ class importExportDialog(wx.Dialog):
     def importCSVAsLog(self, restoreProfileToDefault, mergeWithThisProfile=None):
         for key in kaffelogic_studio_defaults.notSavedInProfile:
             if key not in kaffelogic_studio_defaults.profileDataInLog:
-                if key in self.parent.configuration.keys():
+                if key in list(self.parent.configuration.keys()):
                     self.parent.configuration.pop(key)
                 if key in self.parent.configurationOrderedKeys:
                     self.parent.configurationOrderedKeys.remove(key)
@@ -912,7 +912,7 @@ class importExportDialog(wx.Dialog):
     def appendProfileToDatastring(self):
         profileText = core_studio.dataObjectsToString(self.parent)
         roastEnd = ''
-        if 'roast_end' in self.parent.configuration.keys():
+        if 'roast_end' in list(self.parent.configuration.keys()):
             roastEnd = 'roast_end:' + str(
                 utilities.fromMinSec(re.sub(r'\s.*', '', self.parent.configuration['roast_end']))) + '\n'
         self.parent.datastring = roastEnd + profileText + self.parent.datastring
@@ -970,11 +970,11 @@ class importExportDialog(wx.Dialog):
         else:
             # must be log
             data = self.parent.logData
-            BT_column_name = 'temp' if 'temp' in data.ySeriesRaw.keys() else 'BT' if 'BT' in data.ySeriesRaw.keys() else 'Bean_temp'
+            BT_column_name = 'temp' if 'temp' in list(data.ySeriesRaw.keys()) else 'BT' if 'BT' in list(data.ySeriesRaw.keys()) else 'Bean_temp'
             BT_points = data.ySeriesRaw[BT_column_name]
-            ET_points = data.ySeriesRaw['ET'] if 'ET' in data.ySeriesRaw.keys() else []
+            ET_points = data.ySeriesRaw['ET'] if 'ET' in list(data.ySeriesRaw.keys()) else []
             power_points = data.ySeriesRaw[
-                'power_kW'] if 'power_kW' in data.ySeriesRaw.keys() and include_extras else []
+                'power_kW'] if 'power_kW' in list(data.ySeriesRaw.keys()) and include_extras else []
             fan_points = self.parent.page2.pointsAsGraphed if self.parent.profileIsFromLogFile and include_extras else []
             event_points = data.roastEventData
             event_names = data.roastEventNames
@@ -1034,7 +1034,7 @@ class importExportDialog(wx.Dialog):
             suffix = 'json'
             tasting_notes = self.parent.page3.configControls["tasting_notes"].GetValue() if not is_profile else ""
             profile_description = self.parent.page3.configControls[
-                "profile_description"].GetValue() if "profile_description" in self.parent.page3.configControls.keys() else ""
+                "profile_description"].GetValue() if "profile_description" in list(self.parent.page3.configControls.keys()) else ""
             text = json.dumps(make_JSON_object(
                 include_extras,
                 notes=(profile_description, tasting_notes),

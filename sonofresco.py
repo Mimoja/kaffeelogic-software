@@ -86,8 +86,8 @@ def verify(self, points):
             self.page1.selectedIndex = i
             self.page1.setSpinners()
             self.page1.reDraw()
-            message = u"Sonofresco™ profiles have minimum rates of rise between profile points. The temperature after the point indicated needs to reach at least " + \
-                          str(min_rise) + temperature.insertTemperatureUnit(u"° at the next profile point")
+            message = "Sonofresco™ profiles have minimum rates of rise between profile points. The temperature after the point indicated needs to reach at least " + \
+                          str(min_rise) + temperature.insertTemperatureUnit("° at the next profile point")
             if _applier.enabled:
                 message += " (before temperature conversion)"
             message += "."
@@ -98,8 +98,8 @@ def verify(self, points):
             self.page1.selectedIndex = i
             self.page1.setSpinners()
             self.page1.reDraw()
-            message = u"Sonofresco™ profiles have maximum rates of rise between profile points. The temperature after the point indicated needs to reach no more than " + \
-                          str(max_rise) + temperature.insertTemperatureUnit(u"° at the next profile point")
+            message = "Sonofresco™ profiles have maximum rates of rise between profile points. The temperature after the point indicated needs to reach no more than " + \
+                          str(max_rise) + temperature.insertTemperatureUnit("° at the next profile point")
             if _applier.enabled:
                 message += " (before temperature conversion)"
             message += "."
@@ -113,7 +113,7 @@ def verify(self, points):
             self.page1.reDraw()
             message = "The temperature at the point indicated is higher than the maximum allowed of " + \
                       str(applyEnvelopeSonofrescoToKaffelogicTemp(max_temperature_permitted)) + \
-                      temperature.insertTemperatureUnit(u"°")
+                      temperature.insertTemperatureUnit("°")
             if _applier.enabled:
                 message += " (before temperature conversion)"
             message += "."
@@ -124,7 +124,7 @@ def canExportSonofresco(self):
     return getProfilesXml(self) is not None
     
 def setLimits(self, limits):
-    limits.description = u" [Sonofresco™ mode]"
+    limits.description = " [Sonofresco™ mode]"
     limits.canExportSonofresco_fn = canExportSonofresco
     limits.level_min_val = 0
     limits.level_max_val = 9
@@ -249,7 +249,7 @@ class importDialog(wx.Dialog):
     def __init__(self, parent):
         super(importDialog, self).__init__(parent) 
         self.InitUI(parent)
-        self.SetTitle(u"Import from Sonofresco™")
+        self.SetTitle("Import from Sonofresco™")
         
     def refreshTreeAndDoc(self):
         self.profilesTree = getProfilesXml(self.parent)
@@ -283,12 +283,12 @@ class importDialog(wx.Dialog):
         cancelButton = wx.Button(self, label='Cancel')
         buttons.Add(importButton, 0, wx.ALL | wx.ALIGN_RIGHT, 7) # Mac buttons need 7-pixel borders or they overlap
         buttons.Add(cancelButton, 0, wx.ALL | wx.ALIGN_RIGHT, 7)
-        self.onlyDefaultMessage = wx.StaticText(self, -1, u"Sonofresco™ Advanced Definition Roasting (ADR) profiles not\nfound at that location. Only the default profile is available.")
+        self.onlyDefaultMessage = wx.StaticText(self, -1, "Sonofresco™ Advanced Definition Roasting (ADR) profiles not\nfound at that location. Only the default profile is available.")
         box.Add(self.onlyDefaultMessage, 0, wx.ALL, 10)
         if self.profilesTree is not None:
             self.onlyDefaultMessage.Hide()
         box.Add(self.listControl, 0, wx.ALL | wx.ALIGN_CENTRE, 10)
-        box.Add(temperature.widget(self, self.parent, "Sonofresco", u"kaffelogic/sonofresco_envelope_temperatures", "sonofresco", str(defaults), _applier).box)
+        box.Add(temperature.widget(self, self.parent, "Sonofresco", "kaffelogic/sonofresco_envelope_temperatures", "sonofresco", str(defaults), _applier).box)
         box.Add(buttons, 0, wx.ALL | wx.ALIGN_CENTRE, 10)
         box.SetSizeHints(self)
         self.SetSizerAndFit(box)
@@ -338,14 +338,14 @@ class exportDialog(wx.Dialog):
         self.profilesTree = getProfilesXml(self.parent)
         super(exportDialog, self).__init__(parent) 
         if self.profilesTree is None:
-            wx.MessageBox(u"Sonofresco™ Advanced Definition Roasting (ADR) profiles not found for current user.", "Not found",
+            wx.MessageBox("Sonofresco™ Advanced Definition Roasting (ADR) profiles not found for current user.", "Not found",
                        wx.OK, self)
             wx.CallAfter(self.Close)
             return
         else:
             self.profilesDoc = self.profilesTree.getroot()
         self.InitUI()
-        self.SetTitle(u"Export to Sonofresco™")
+        self.SetTitle("Export to Sonofresco™")
                     
     def InitUI(self):
         box = wx.BoxSizer(wx.VERTICAL)
@@ -364,7 +364,7 @@ class exportDialog(wx.Dialog):
         exportButtons.Add(cancelButton, 1, wx.ALL, 7)
         box.Add(self.listControl, 0, wx.ALIGN_CENTRE | wx.ALL, 10)
         box.Add(newButtons, 0, wx.LEFT | wx.RIGHT | wx.EXPAND, 10)
-        box.Add(temperature.widget(self, self.parent, "Sonofresco", u"kaffelogic/sonofresco_envelope_temperatures", "sonofresco", str(defaults), _applier).box)
+        box.Add(temperature.widget(self, self.parent, "Sonofresco", "kaffelogic/sonofresco_envelope_temperatures", "sonofresco", str(defaults), _applier).box)
         box.Add(exportButtons, 0, wx.ALL | wx.ALIGN_CENTRE, 10)
         box.SetSizeHints(self)
         self.SetSizerAndFit(box)
@@ -375,7 +375,7 @@ class exportDialog(wx.Dialog):
         cancelButton.Bind(wx.EVT_BUTTON, self.onCancel)
         exportButton.SetDefault()
         self.onAdd(None)
-        _applier.parseCelciusEnvelope(self.parent.options.getUserOption(u"kaffelogic/sonofresco_envelope_temperatures", default=str(defaults)))
+        _applier.parseCelciusEnvelope(self.parent.options.getUserOption("kaffelogic/sonofresco_envelope_temperatures", default=str(defaults)))
         
     def onClick(self, e):
         self.newName.Clear()

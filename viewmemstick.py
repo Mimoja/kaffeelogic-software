@@ -136,7 +136,7 @@ class showMemstickDialog(wx.Dialog):
                 htmlString += '<p><a href="function:copyCoreProfiles">Copy/replace all core profiles on ' +  self.memstick + '</a></p>'
                 htmlString += '<p><table bgcolor="#e0e0e0"><tr><td><b>On Kaffelogic web site</b></td><td></td><td><b>On ' + self.memstick + '</b></td></tr>'
                 for core_f in self.core_files:
-                    htmlString += '<tr><td bgcolor="#c0c0c0">' + core_f['profile_file_name'] + u'</td><td>»</td><td bgcolor="#c0c0c0">' + core_f['replace_me'] + '</td></tr>'
+                    htmlString += '<tr><td bgcolor="#c0c0c0">' + core_f['profile_file_name'] + '</td><td>»</td><td bgcolor="#c0c0c0">' + core_f['replace_me'] + '</td></tr>'
                 htmlString += '</table></p>'
         else:
             if errorConnecting:
@@ -256,9 +256,9 @@ class showMemstickDialog(wx.Dialog):
             htmlString += UNABLE_TO_CONNECT_MESSAGE.replace('[[errorMessage]]', errorMessage)
             if existingVersion is not None:
                 htmlString += "<p>The firmware update on " + self.memstick + " is Version " + existingVersion + "</p>"
-        htmlString += u"<p><i>Verify the firmware version that is installed on your roaster:</i></p>"
-        htmlString += u"<ol><li>Press ≡ until you see the option for technical info.</li>"
-        htmlString += u"<li>Press › until you see the firmware version displayed.</li></ol>"
+        htmlString += "<p><i>Verify the firmware version that is installed on your roaster:</i></p>"
+        htmlString += "<ol><li>Press ≡ until you see the option for technical info.</li>"
+        htmlString += "<li>Press › until you see the firmware version displayed.</li></ol>"
 
         htmlObject.SetPage(htmlString)
 
@@ -401,8 +401,8 @@ class showMemstickDialog(wx.Dialog):
         return page
 
     def buildTableOfFileNames(self, pageTitle, columnHeadings, tableColumns, thisDir, suffix, sort):
-        htmlString = u'<p align="right">' + core_studio.REFRESH_CHAR + '<a href="function:refresh">' \
-                     u'Refresh</a> &nbsp; &nbsp; '
+        htmlString = '<p align="right">' + core_studio.REFRESH_CHAR + '<a href="function:refresh">' \
+                     'Refresh</a> &nbsp; &nbsp; '
         # weird layout bug on Mac with unicode chars, so don't include refresh char in the link text
         if pageTitle == 'Logs':
             if not self.expandNotes:
@@ -412,7 +412,7 @@ class showMemstickDialog(wx.Dialog):
             htmlString += '&nbsp;notes'
         elif pageTitle == 'Profiles':
             if not self.expandDescription:
-                htmlString += u'+<a href="function:refresh" target="toggle_expansion">Expand'
+                htmlString += '+<a href="function:refresh" target="toggle_expansion">Expand'
             else:
                 htmlString += '-<a href="function:refresh" target="toggle_expansion">Collapse'
             htmlString += '&nbsp;descriptions'

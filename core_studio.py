@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from __future__ import division
+
 
 import numpy
 
@@ -90,8 +90,8 @@ FIXED_SCALE_COLUMNS = {"profile_ROR": 1, "actual_ROR": 1, "desired_ROR": 1, "spo
 ROR_MULTIPLIER_APPLIES_TO = ["profile_ROR", "actual_ROR", "desired_ROR"]
 ROR_SMOOTHING_APPLIES_TO = "actual_ROR"
 
-TM = u'™'
-REFRESH_CHAR = u'↻' if not isWindows else u'ѻ'
+TM = '™'
+REFRESH_CHAR = '↻' if not isWindows else 'ѻ'
 ARROW_KEYS = [wx.WXK_LEFT, wx.WXK_RIGHT, wx.WXK_UP, wx.WXK_DOWN]
 
 """
@@ -674,14 +674,14 @@ class LogData:
         if legend in EVENT_NAMES:
             return eventStyles[legend]["colour"]
         else:
-            if legend in self.colours.keys():
+            if legend in list(self.colours.keys()):
                 return self.colours[legend]
             else:
                 return 'grey'
 
     def legendToColumnName(self, legend):
         legend = utilities.replaceSpaceWithUnderscore(legend)
-        for columnName in self.legends.keys():
+        for columnName in list(self.legends.keys()):
             if legend == utilities.replaceSpaceWithUnderscore(self.legends[columnName]):
                 return columnName
         return legend
@@ -825,7 +825,7 @@ def stringToLogData(string, frame):
                     if i + 1 < len(columnHeadings):
                         logData.autoScale[columnHeadings[i + 1]] = True
                 else:
-                    if columnHeadings[i] in FIXED_SCALE_COLUMNS.keys():
+                    if columnHeadings[i] in list(FIXED_SCALE_COLUMNS.keys()):
                         multiplier = int(frame.options.getUserOption("ror_multiplier")) if columnHeadings[
                                                                                                i] in ROR_MULTIPLIER_APPLIES_TO else 1
                         scaleFactor = FIXED_SCALE_COLUMNS[columnHeadings[i]] * multiplier
@@ -849,9 +849,9 @@ def addScaleFactorToLegendText(text, scaleFactor):
     if scaleFactor == 1:
         return replaceUnderscoreWithSpace(text)
     elif scaleFactor > 1:
-        return replaceUnderscoreWithSpace(text + u' × ' + str(int(scaleFactor)))
+        return replaceUnderscoreWithSpace(text + ' × ' + str(int(scaleFactor)))
     else:
-        return replaceUnderscoreWithSpace(text + u' ÷ ' + str(int(1.0 / scaleFactor)))
+        return replaceUnderscoreWithSpace(text + ' ÷ ' + str(int(1.0 / scaleFactor)))
 
 
 def addZoneStartEnd(self, legendText):
@@ -871,7 +871,7 @@ def removeScaleFactorFromLegendAndData(frame, legendText, dataValue, scale=None)
     legendText = replaceUnderscoreWithSpace(legendText)
     parts = legendText.split(':')
     legendText = parts[0]
-    legend = legendText.split(u' × ')
+    legend = legendText.split(' × ')
     if len(legend) == 2:
         legendText = legend[0]
         scale = float(legend[1])
@@ -1049,11 +1049,11 @@ def stringToKeyValues(fileName, string, wanted):
 
 def dataObjectsToString(frame):
     schemaVersion = fileproperties.updateSchemaVersion(frame)
-    page3_list = frame.page3.configControls.keys()
-    page4_list = frame.page4.configControls.keys()
+    page3_list = list(frame.page3.configControls.keys())
+    page4_list = list(frame.page4.configControls.keys())
     orderedList = copy.deepcopy(frame.configurationOrderedKeys)
     fileproperties.filterOutUnsupportedSettings(orderedList, schemaVersion)  # filter known future keys
-    known = set(frame.defaults.keys() + profileDataInLog + logFileName + notSavedInProfile)
+    known = set(list(frame.defaults.keys()) + profileDataInLog + logFileName + notSavedInProfile)
     orderedList = [x for x in orderedList if x in known]
 
     for key in page3_list:
@@ -1065,22 +1065,22 @@ def dataObjectsToString(frame):
     frame.configuration['recommended_level'] = frame.page1.level_floatspin.GetValue()
     frame.configuration['expect_colrchange'] = replaceBlankWithZero(frame.page1.phasesObject.getColourChange())
     frame.configuration['expect_fc'] = replaceBlankWithZero(frame.page1.phasesObject.getFirstCrack())
-    result = u''
+    result = ''
     for key in orderedList:
         if (key in page3_list + page4_list + notOnTabs) and (not key in logFileName + notSavedInProfile):
             if key in timeInMinSec:
-                result += key + ':' + unicode(fromMinSec(frame.configuration[key])) + '\n'
+                result += key + ':' + str(fromMinSec(frame.configuration[key])) + '\n'
             elif key == 'roast_levels':
                 result += key + ':' + temperature.convertSpecifiedUnitListToCelcius(frame.configuration[key],
                                                                                              rounding=None) + '\n'
             elif key in temperatureParameters:
-                result += key + ':' + unicode(temperature.convertSpecifiedUnitToCelcius(
+                result += key + ':' + str(temperature.convertSpecifiedUnitToCelcius(
                                             frame.configuration[key],
                                             rounding=None,
                                             keepZero=key in keepZeroParameters
                                       ))+ '\n'
             elif key in temperatureDeltas:
-                result += key + ':' + unicode(temperature.convertSpecifiedUnitToCelcius(
+                result += key + ':' + str(temperature.convertSpecifiedUnitToCelcius(
                                             frame.configuration[key],
                                             rounding=None,
                                             delta=True
@@ -1088,7 +1088,7 @@ def dataObjectsToString(frame):
             elif key in zoneBoosts:
                 result += key + ':' + convertZoneBoostSpecifiedUnitToCelcius(frame.configuration, key, rounding=None) + '\n'
             else:
-                result += key + ':' + unicode(frame.configuration[key]) + '\n'
+                result += key + ':' + str(frame.configuration[key]) + '\n'
 
     result += 'profile_modified:' + datetime.datetime.now().strftime('%d/%m/%Y %I:%M:%S%p') + '\n'
     result += profilePointsToString("roast_profile", temperature.convertSpecifiedUnitProfileToCelcius(frame.page1.profilePoints, rounding=None))
@@ -1118,10 +1118,10 @@ def convertZoneBoostSpecifiedUnitToCelcius(configuration, key, rounding=None):
     Kd_key = 'zone' + index + '_multiplier_Kd'
     if float(configuration[Kp_key]) == 0 and float(configuration[Kd_key]) == 0:
         # power profile zone, so no conversion
-        return unicode(value)
+        return str(value)
     else:
         # boost or gain scheduling zone, so convert to F if appropriate
-        return unicode(temperature.convertSpecifiedUnitToCelcius(
+        return str(temperature.convertSpecifiedUnitToCelcius(
             value,
             rounding=None,
             delta=True
@@ -1163,23 +1163,23 @@ def extractShortName(fileName, shortName):
 def getProfileFilesInDir(d, suffix, sort=False):
     if not os.path.exists(d):
         return None
-    fileList = [d + os.sep + x for x in os.listdir(unicode(d)) if
-                x.endswith(u'.' + suffix) and not file_is_hidden(d + os.sep + x)]
+    fileList = [d + os.sep + x for x in os.listdir(str(d)) if
+                x.endswith('.' + suffix) and not file_is_hidden(d + os.sep + x)]
     if sort:
         fileList.sort()
     return fileList
 
 
 def extractVersionFromFirmwareFilename(fname, modelNumber):
-    ver = re.sub(u'^' + modelNumber + u'-', '', fname)
-    ver = re.sub(u'.bin', '', ver)
+    ver = re.sub('^' + modelNumber + '-', '', fname)
+    ver = re.sub('.bin', '', ver)
     return ver
 
 
 def getFirmwareFilesInDir(d, modelNumber, sort=True):
     fileList = []
-    for x in (os.listdir(unicode(d)) if os.path.exists(d) else []):
-        if re.match(modelNumber + ur'-\d+(\.\d+)*\.bin$', x, re.I) and not file_is_hidden(d + os.sep + x):
+    for x in (os.listdir(str(d)) if os.path.exists(d) else []):
+        if re.match(modelNumber + r'-\d+(\.\d+)*\.bin$', x, re.I) and not file_is_hidden(d + os.sep + x):
             fileList.append(extractVersionFromFirmwareFilename(x, modelNumber))
     if sort:
         fileList.sort(cmp=compareVersions, reverse=True)
@@ -1615,11 +1615,11 @@ def drawProfile(self, title, yAxis, profilePoints, selectedIndex, selectedType, 
     bezier_line = PolyLine(bezier_points, legend='Profile', colour='blue', width=self.frame.lineWidth) if len(
         bezier_points) > 1 else None
     rate_of_rise_line = PolyLine(utilities.filterPointsY(self.gradientsAsGraphedScaled, temperature.convertCelciusPointToSpecifiedUnit(DERIVATIVE_ALLOWED_YRANGE, self.frame.temperature_unit)),
-                                 legend=addScaleFactorToLegendText(temperature.insertTemperatureUnit(u'Rate of rise °/min',
+                                 legend=addScaleFactorToLegendText(temperature.insertTemperatureUnit('Rate of rise °/min',
                                                                 self.frame.temperature_unit), RoR_scale),
                                  colour='green', width=self.frame.lineWidth)
     second_derivative_line = PolyLine(utilities.filterPointsY(self.secdivsAsGraphed, temperature.convertCelciusPointToSpecifiedUnit(DERIVATIVE_ALLOWED_YRANGE, self.frame.temperature_unit)),
-                                      legend=addScaleFactorToLegendText(temperature.insertTemperatureUnit(u'Second derivative °/min/min',
+                                      legend=addScaleFactorToLegendText(temperature.insertTemperatureUnit('Second derivative °/min/min',
                                                                 self.frame.temperature_unit),
                                                                         RoR_scale), colour='purple',
                                       width=self.frame.lineWidth)
@@ -1653,7 +1653,7 @@ def drawProfile(self, title, yAxis, profilePoints, selectedIndex, selectedType, 
         linesToGraph += comparisonLines
 
     if yAxis == 'temperature':
-        yAxis = temperature.insertTemperatureUnit(u'temperature (°)', self.frame.temperature_unit)
+        yAxis = temperature.insertTemperatureUnit('temperature (°)', self.frame.temperature_unit)
     if yAxis == 'speed':
         yAxis = 'speed (RPM x 10)'
     return PlotGraphics(linesToGraph, title, "time (min:sec)", yAxis)
@@ -1686,14 +1686,14 @@ class extractProfileDialog(wx.Dialog):
         self.box = wx.BoxSizer(wx.VERTICAL)
         grid = wx.FlexGridSizer(cols=5, vgap=5, hgap=5)
 
-        label = wx.StaticText(self, -1, u"Copy logged data to expected/recommended values if required")
+        label = wx.StaticText(self, -1, "Copy logged data to expected/recommended values if required")
         self.box.Add(label, 0, wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, 10)
 
         self.controls = {}
         colour_change = self.parent.logPanel.phasesObject.getColourChange()
         first_crack = self.parent.logPanel.phasesObject.getFirstCrack()
         roast_level = self.parent.page3.configControls[
-            'roasting_level'].GetValue() if 'roasting_level' in self.parent.page3.configControls.keys() else ''
+            'roasting_level'].GetValue() if 'roasting_level' in list(self.parent.page3.configControls.keys()) else ''
 
         self.addRow(grid, "colour change", colour_change, self.parent.page1.phasesObject.getColourChange())
         self.addRow(grid, "first crack", first_crack, self.parent.page1.phasesObject.getFirstCrack())
@@ -1733,7 +1733,7 @@ class extractProfileDialog(wx.Dialog):
         logged = wx.TextCtrl(self, -1, loggedValue, size=(60, -1))
         self.controls["source_" + eventName] = logged
         grid.Add(logged, 0, wx.EXPAND)
-        grid.Add(wx.Button(self, label=u'»', size=(20, -1), name=eventName))
+        grid.Add(wx.Button(self, label='»', size=(20, -1), name=eventName))
         expected = wx.TextCtrl(self, -1, expectedValue, size=(60, -1))
         expected.Bind(wx.EVT_TEXT, self.onModify)
         self.controls["destination_" + eventName] = expected
@@ -1843,7 +1843,7 @@ class mergeDialog(wx.Dialog):
             self.parent.page2.setSpinners()
             self.updated = 1
         if self.description.IsChecked():
-            desiredSettings = self.parent.page3.configControls.keys()  # we know it is a profile, so grab all of the config settings from page3
+            desiredSettings = list(self.parent.page3.configControls.keys())  # we know it is a profile, so grab all of the config settings from page3
             self.pageMerge(desiredSettings, self.parent.page3, 2)
         desiredSettings = []
         if self.zones.IsChecked():
@@ -1860,7 +1860,7 @@ class mergeDialog(wx.Dialog):
         if len(desiredSettings) > 0:
             settingsKeys = page.configList
             for key in settingsKeys:
-                if (key in desiredSettings) and (key in page.configControls.keys()):
+                if (key in desiredSettings) and (key in list(page.configControls.keys())):
                     control = page.configControls[key]
                     new = self.parent.mergeFrom.configuration[key]
                     old = floaty(control.GetValue())
@@ -1871,7 +1871,7 @@ class mergeDialog(wx.Dialog):
                         if key == settingsKeys[-1]:
                             isBulkChange = False
                         self.parent.focus(page, control, isBulkChange=isBulkChange)
-                        control.ChangeValue(unicode(new))
+                        control.ChangeValue(str(new))
                         self.parent.txtChange(page, control, isBulkChange=isBulkChange)  # captures it in history
             self.updated = pageIndex
 
@@ -1985,9 +1985,9 @@ class myFileDialog(wx.FileDialog):
 
 def refreshGridPanel(panel, app):
     for item in panel.configList:
-        if item in panel.configControls.keys():
-            if item in app.configuration.keys():
-                panel.configControls[item].ChangeValue(decodeCtrlV(unicode(app.configuration[item])))
+        if item in list(panel.configControls.keys()):
+            if item in list(app.configuration.keys()):
+                panel.configControls[item].ChangeValue(decodeCtrlV(str(app.configuration[item])))
             else:
                 panel.configControls[item].ChangeValue('')
     panel.Layout()
@@ -2000,16 +2000,16 @@ class HistoryConfigEntry:
         self.isFocusEvent = isFocusEvent
         self.bulkChange = isBulkChange
         self.key = control.GetName()
-        self.value = unicode(control.GetValue())
+        self.value = str(control.GetValue())
         if hasattr(control, 'GetInsertionPoint'):
             self.cursorPos = control.GetInsertionPoint() + (1 if applyLinuxFix and isLinux else 0)
         else:
             self.cursorPos = 0
 
     def toDisplay(self):
-        print self.key + ": " + self.value + " @" + str(self.cursorPos)
-        if hasattr(self, "restoreCursorPos"): print "restore to " + str(self.restoreCursorPos)
-        if hasattr(self, "isFocusEvent"): print "isFocusEvent " + str(self.isFocusEvent)
+        print(self.key + ": " + self.value + " @" + str(self.cursorPos))
+        if hasattr(self, "restoreCursorPos"): print("restore to " + str(self.restoreCursorPos))
+        if hasattr(self, "isFocusEvent"): print("isFocusEvent " + str(self.isFocusEvent))
 
 
 class HistoryNullConfigEntry:
@@ -2040,8 +2040,8 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
     def initConfigList(self, frame, configList):
         # Data that is not recognised because the log/profile has data elements in it that are not part of the schema is unknown.
         # Unknowns always go on page3 for consistency.
-        known = set(frame.defaults.keys() + profileDataInLog + logFileName + notSavedInProfile)
-        unknown = [x for x in frame.configuration.keys() if x not in known]
+        known = set(list(frame.defaults.keys()) + profileDataInLog + logFileName + notSavedInProfile)
+        unknown = [x for x in list(frame.configuration.keys()) if x not in known]
         if configList == "others":
             # We are populating page4, exclude the unknowns
             keys = frame.configurationOrderedKeys
@@ -2059,7 +2059,7 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
         # The history array must contain one entry, so we make sure it does, and also make sure that it is the first enabled control on the tab.
         self.history = [HistoryConfigEntry(self.configControls[self.configList[0]], isFocusEvent=True)]
         for control in self.configList:
-            if control in self.configControls.keys() and self.configControls[control].IsEnabled():
+            if control in list(self.configControls.keys()) and self.configControls[control].IsEnabled():
                 self.history = [HistoryConfigEntry(self.configControls[control], isFocusEvent=True)]
                 break
         # self.history = [HistoryConfigEntry(self.configControls[self.configList[0]])]
@@ -2106,9 +2106,9 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
         difficulty_text = self.frame.options.getUserOption("difficulty")
         difficulty_level = self.difficulty_name_to_integer(difficulty_text)
         for item in self.configList:
-            if item in self.configLabels.keys() and item in self.configControls.keys():
+            if item in list(self.configLabels.keys()) and item in list(self.configControls.keys()):
                 item_difficulty = self.difficulty_name_to_integer(
-                    self.frame.hints[item]["difficulty"]) if item in self.frame.hints.keys() else 4
+                    self.frame.hints[item]["difficulty"]) if item in list(self.frame.hints.keys()) else 4
                 diff = self.frame.FindWindowByName(item + '_diff')
                 if item_difficulty <= difficulty_level:
                     if diff is not None: diff.Show()
@@ -2129,8 +2129,8 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
     def formatEventDataByKey(self, frame, key):
         if key in frame.logData.roastEventNames:
-            thisTemperature = ' ' + unicode(
-                round(frame.logData.roastEventData[frame.logData.roastEventNames.index(key)][1], 1)) + temperature.insertTemperatureUnit(u'°')
+            thisTemperature = ' ' + str(
+                round(frame.logData.roastEventData[frame.logData.roastEventNames.index(key)][1], 1)) + temperature.insertTemperatureUnit('°')
             return toMinSec(float(fromMinSec(frame.configuration[key]))) + thisTemperature
 
     def setDiffStatusByKey(self, frame, key, disabling=False):
@@ -2139,30 +2139,30 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
             diff.SetLabel('')
         else:
             if diff is not None:
-                diff.SetLabel(u'↭' if frame.comparisonDiffByKey(key) is not None else u'')
+                diff.SetLabel('↭' if frame.comparisonDiffByKey(key) is not None else '')
                 return diff
 
     def refreshDiffStatusAll(self, frame):
-        for key in self.configControls.keys():
+        for key in list(self.configControls.keys()):
             self.setDiffStatusByKey(frame, key)
 
     def clearDiffStatusAll(self, frame):
-        for key in self.configControls.keys():
+        for key in list(self.configControls.keys()):
             self.setDiffStatusByKey(frame, key, disabling=True)
 
     def addItem(self, frame, item, is_expanding):
         if frame.fileType == "log" and item in notFoundInLog:
             return
         if frame.fileType == "log" and item in optionalInLog and (
-                item not in frame.configuration.keys() or frame.configuration[item] in [None, '']):
+                item not in list(frame.configuration.keys()) or frame.configuration[item] in [None, '']):
             return
         if is_expanding:
             self.grid.SetRows(self.grid.GetRows() + 1)
-        if not item in frame.configuration.keys():
+        if not item in list(frame.configuration.keys()):
             frame.configuration[item] = ''
             frame.configurationOrderedKeys.append(item)
         if item == 'profile_short_name':
-            frame.configuration[item] = unicode(frame.configuration[item])[:15]
+            frame.configuration[item] = str(frame.configuration[item])[:15]
         if item == 'profile_designer':
             frame.configuration[item] = truncateUTF8stringTo(frame.configuration[item],
                                                              31)  # unicode is allowed in a designer name, but only 31 bytes of utf-8 encoded text
@@ -2170,21 +2170,21 @@ class GridPanel(wx.lib.scrolledpanel.ScrolledPanel):
         label = wx.StaticText(self, -1, replaceUnderscoreWithSpace(item))
         labelSizer = wx.BoxSizer(wx.HORIZONTAL)
         labelSizer.Add(label)
-        diff_label = wx.StaticText(self, -1, u'', size=(20, -1),
+        diff_label = wx.StaticText(self, -1, '', size=(20, -1),
                                    style=wx.ALIGN_CENTRE_HORIZONTAL | wx.ALIGN_BOTTOM | wx.ST_NO_AUTORESIZE,
                                    name=item + '_diff')
         diff_label.SetFont(diff_label.GetFont().Scale(1))
         labelSizer.Add(diff_label)
         if item == 'tasting_notes' or item == 'profile_description':
             self.grid.Add(labelSizer, pos=(self.itemCount, 0), flag=wx.ALIGN_RIGHT | wx.TOP, border=4)
-            txt = wx.TextCtrl(self, -1, decodeCtrlV(unicode(frame.configuration[item])), size=(-1, 200),
+            txt = wx.TextCtrl(self, -1, decodeCtrlV(str(frame.configuration[item])), size=(-1, 200),
                               style=wx.TE_MULTILINE, name=item)
         else:
             self.grid.Add(labelSizer, pos=(self.itemCount, 0), flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             if item in frame.logData.roastEventNames:
                 contents = self.formatEventDataByKey(frame, item)
             else:
-                contents = trimTrailingPointZero(decodeCtrlV(unicode(frame.configuration[item])))
+                contents = trimTrailingPointZero(decodeCtrlV(str(frame.configuration[item])))
             txt = wx.TextCtrl(self, -1, contents, name=item)
         if item == 'profile_short_name':
             txt.SetMaxLength(15)
@@ -2304,7 +2304,7 @@ class myFloatSpinWithChangeValue(FS.FloatSpin):
         return self.__name
 
     def ChangeValue(self, val):
-        self._textctrl.ChangeValue(unicode(val))
+        self._textctrl.ChangeValue(str(val))
         self.SyncSpinToText(send_event=False)
 
 
@@ -2523,7 +2523,7 @@ class ProfilePanel(wx.Panel):
             levelString = self.level_floatspin.GetValue()
             self.level_temperature.SetLabel(
                 str(round(temperatureFromLevel(levelString, thresholdString), 1)) +
-                temperature.insertTemperatureUnit(u'°', self.frame.temperature_unit))
+                temperature.insertTemperatureUnit('°', self.frame.temperature_unit))
             self.level_description.SetLabel(descriptionFromLevel(levelString))
             if self.frame.configuration['emulation_mode'] == EMULATE_SONOFRESCO:
                 self.level_description.Hide()
@@ -4202,7 +4202,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.captureHistory(page, 'text', item=control, isBulkChange=isBulkChange, applyLinuxFix=applyLinuxFix)
         self.modified(True)
         if self.comparisons is not None:
-            for k, val in page.configControls.iteritems():
+            for k, val in page.configControls.items():
                 if val is control:
                     key = k
                     break
@@ -4496,7 +4496,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
     def removeLogPage(self):
         if self.notebook.GetPageText(0) == "Log":
             self.persistCheckBoxData()
-            for key in self.checkBoxControls.keys():
+            for key in list(self.checkBoxControls.keys()):
                 if key.startswith("Log_"):
                     self.checkBoxControls.pop(key)
             self.notebook.DeletePage(0)
@@ -4535,8 +4535,8 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         self.Close()
 
     def updateLogPanels(self):
-        known = set(self.defaults.keys() + profileDataInLog + logFileName + notSavedInProfile)
-        unknown = [x for x in self.configuration.keys() if x not in known]
+        known = set(list(self.defaults.keys()) + profileDataInLog + logFileName + notSavedInProfile)
+        unknown = [x for x in list(self.configuration.keys()) if x not in known]
         if self.fileType == "profile":
             for unwanted in logFileName + notSavedInProfile + unknown:
                 if unwanted in self.page3.configList:
@@ -4915,10 +4915,10 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                 {'profile_file_name': DEFAULT_PROFILE, 'profile_short_name': DEFAULT_PROFILE, 'profile_designer': '',
                  'profile_description': '', 'profile_modified': ''})
             otherShortNames = [extractShortName(pro['profile_file_name'], pro['profile_short_name'].strip()) for pro in
-                               profiles if 'profile_short_name' in pro.keys() and \
+                               profiles if 'profile_short_name' in list(pro.keys()) and \
                                os.path.basename(fileName) != pro['profile_file_name']]
             if currentShortName in otherShortNames:
-                conflictedProfiles = [pro for pro in profiles if 'profile_short_name' in pro.keys() and \
+                conflictedProfiles = [pro for pro in profiles if 'profile_short_name' in list(pro.keys()) and \
                                       currentShortName == extractShortName(pro['profile_file_name'],
                                                                            pro['profile_short_name'].strip()) and \
                                       os.path.basename(fileName) != pro['profile_file_name']]
@@ -4945,11 +4945,11 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         newstring = re.sub(r"\n$", "", newstring) + "\n"  # force file to end with line end
 
         original_colour_change = floatOrNone(fromMinSec(
-            self.configuration["colour_change"] if "colour_change" in self.configuration.keys() else ""))
+            self.configuration["colour_change"] if "colour_change" in list(self.configuration.keys()) else ""))
         original_first_crack = floatOrNone(
-            fromMinSec(self.configuration["first_crack"] if "first_crack" in self.configuration.keys() else ""))
+            fromMinSec(self.configuration["first_crack"] if "first_crack" in list(self.configuration.keys()) else ""))
         original_roast_end = floatOrNone(
-            fromMinSec(self.configuration["roast_end"] if "roast_end" in self.configuration.keys() else ""))
+            fromMinSec(self.configuration["roast_end"] if "roast_end" in list(self.configuration.keys()) else ""))
         new_colour_change = self.logPanel.phasesObject.getColourChangeTime()
         new_first_crack = self.logPanel.phasesObject.getFirstCrackTime()
         new_roast_end = self.logPanel.phasesObject.getRoastEndTime()
@@ -5097,7 +5097,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                     self.modified(temporaryModified, disableRemovableDriveButton=True)
 
     def persistCheckBoxData(self):
-        for key in self.checkBoxControls.keys():
+        for key in list(self.checkBoxControls.keys()):
             self.options.setUserOption(key, str(self.checkBoxControls[key].GetValue()))
         if hasattr(self, 'logOptionsControls'):
             allLogOptions = []
@@ -5260,30 +5260,30 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         if comparison is None: return None
         logName = os.path.basename(comparison.fileName)
         profileName = logName
-        if "profile_short_name" in comparison.configuration.keys():
+        if "profile_short_name" in list(comparison.configuration.keys()):
             if comparison.configuration["profile_short_name"] != '':
                 profileName = comparison.configuration["profile_short_name"]
             else:
-                if "profile_file_name" in comparison.configuration.keys():
+                if "profile_file_name" in list(comparison.configuration.keys()):
                     profileName = os.path.basename(comparison.configuration["profile_file_name"])
         return (profileName, logName)
 
     def comparisonDiffByKey(self, key):
         if self.comparisons is None: return None
         current_raw = None
-        if key in self.page3.configControls.keys():
-            current_raw = unicode(self.page3.configControls[key].GetValue())
-        if key in self.page4.configControls.keys():
-            current_raw = unicode(self.page4.configControls[key].GetValue())
+        if key in list(self.page3.configControls.keys()):
+            current_raw = str(self.page3.configControls[key].GetValue())
+        if key in list(self.page4.configControls.keys()):
+            current_raw = str(self.page4.configControls[key].GetValue())
         if current_raw is None: return None
         current_raw = utilities.trimWhiteSpace(current_raw)
         current = floaty(fromMinSec(current_raw))
         results = []
         atLeastOneDifference = False
         for comparison in self.comparisons:
-            if key in comparison.configuration.keys():
+            if key in list(comparison.configuration.keys()):
                 compare_raw = trimTrailingPointZero(
-                    utilities.trimWhiteSpace(decodeCtrlV(unicode(comparison.configuration[key]))))
+                    utilities.trimWhiteSpace(decodeCtrlV(str(comparison.configuration[key]))))
                 if key in comparison.logData.roastEventNames:
                     compare_raw = self.page3.formatEventDataByKey(comparison, key)
                 compare = floaty(fromMinSec(compare_raw))
@@ -5387,7 +5387,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
             message = "<h3>Some roast levels are not defined</h3>"
             message += "<p>The maximum temperature of the current profile is " + str(
                 int(round(max_temperature, 0))) + \
-                       temperature.insertTemperatureUnit(u"°, equivalent to level ") + \
+                       temperature.insertTemperatureUnit("°, equivalent to level ") + \
                        str(max_level) + ".</p>"
             message += "This means that roasts between level <b>" + str(max_level) + "</b> and <b>" + str(
                 max_level_desired) + "</b> will not terminate at a predictable time. They may run for up to " + str(
@@ -5471,7 +5471,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                   (" It also makes it likely that you will get '" + severe_message + "' errors. " if severe else '') + \
                   "<p>The recommended preheat power setting of " + expected_preheat_power_str + "&nbsp;watts is based on a temperature rise of " + str(
             int(temperature_at_60 - temperature_at_0)) + \
-                  temperature.insertTemperatureUnit(u"° during the first minute with a typical load of 120g and a fan speed of ") + str(
+                  temperature.insertTemperatureUnit("° during the first minute with a typical load of 120g and a fan speed of ") + str(
             int(round(fan_at_60) * 10)) + \
                   "&nbsp;RPM. " + \
                   ("You may need to collect logs and fine tune " + \
@@ -5554,8 +5554,8 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         if roast_min_desired_rate_of_rise <= recommended + small_amount and roast_min_desired_rate_of_rise >= lowest_acceptable:
             return True
         message = "<i>Roast min desired rate of rise</i> is currently set at <b>" + roast_min_desired_rate_of_rise_str + \
-                  temperature.insertTemperatureUnit(u"</b>°/min. ") + \
-                  "The recommended setting for this profile curve is " + "<b>" + recommended_str + u"</b>."
+                  temperature.insertTemperatureUnit("</b>°/min. ") + \
+                  "The recommended setting for this profile curve is " + "<b>" + recommended_str + "</b>."
         if min_profile_curve_gradient < -small_amount:
             message += "</p><p>The profile curve has negative rate of rise in some places. This is not usually desirable. " + \
                        '<font color="red">Further editing of the roast profile curve is recommended.</font>'
@@ -5563,14 +5563,14 @@ class MyGraph(wx.Frame, w, BaseDataObject):
         if min_profile_curve_gradient >= -small_amount and roast_min_desired_rate_of_rise > min_profile_curve_gradient:  # A1
             message += "The current setting is steeper than the profile curve in some places. In those places the roast will not follow the curve, " + \
                        "instead it will follow the roast min desired rate of rise setting. The profile curve goes as low as " + \
-                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit(u"°/min at time ") + \
+                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit("°/min at time ") + \
                        toMinSec(min_profile_curve_gradient_point[0]) + ".</p>" + \
                        "<p>We recommend lowering the <i>roast min desired rate of rise</i> setting to " + recommended_str + " or lower.</p>"
         if min_profile_curve_gradient >= -small_amount and roast_min_desired_rate_of_rise <= min_profile_curve_gradient \
                 and roast_min_desired_rate_of_rise > min_profile_curve_gradient - temperature.convertCelciusToSpecifiedUnit(self.REJOIN_DIFFERENTIAL + 0.05, rounding=None, delta=True):  # A2 B2
             message += "The current setting is close to the profile curve rate of rise in some places. In those places the roast may not follow the curve, " + \
                        "instead minor fluctuations may cause it to drift above the curve. The profile curve goes as low as " + \
-                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit(u"°/min at time ") + \
+                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit("°/min at time ") + \
                        toMinSec(min_profile_curve_gradient_point[0]) + ".</p>" + \
                        "<p>We recommend lowering the <i>roast min desired rate of rise</i> setting to " + recommended_str + " or lower.</p>"
         if min_profile_curve_gradient >= temperature.convertCelciusToSpecifiedUnit(self.REJOIN_DIFFERENTIAL, rounding=None, delta=True) and roast_min_desired_rate_of_rise < lowest_acceptable:  # A4
@@ -5578,12 +5578,12 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                        "something that is not usually desirable. " + \
                        "The profile curve rate of rise does not go below " + \
                        str(round(min_profile_curve_gradient,
-                                 1)) + temperature.insertTemperatureUnit(u"°/min so a negative setting is unlikely to be necessary.</p>") + \
+                                 1)) + temperature.insertTemperatureUnit("°/min so a negative setting is unlikely to be necessary.</p>") + \
                        "<p>We recommend increasing the <i>roast min desired rate of rise</i> setting to between zero and " + recommended_str + ".</p>"
         if min_profile_curve_gradient >= -small_amount and roast_min_desired_rate_of_rise > lowest_acceptable and \
                 roast_min_desired_rate_of_rise < min_profile_curve_gradient - self.REJOIN_DIFFERENTIAL and min_profile_curve_gradient < self.REJOIN_DIFFERENTIAL:  # B1 B2 B3
             message += "<p>The profile curve rate of rise goes as low as " + \
-                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit(u"°/min at time ") + \
+                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit("°/min at time ") + \
                        toMinSec(min_profile_curve_gradient_point[0]) + ".</p>" + \
                        "<p>A setting of zero or lower may be necessary to allow the system to follow such a flat curve.</p>"
         if min_profile_curve_gradient >= -small_amount and \
@@ -5593,17 +5593,17 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                        "something that is not usually desirable. " + \
                        "The profile curve rate of rise does not go below " + \
                        str(round(min_profile_curve_gradient,
-                                 1)) + temperature.insertTemperatureUnit(u"°/min so such a low setting is unlikely to be necessary.</p>") + \
+                                 1)) + temperature.insertTemperatureUnit("°/min so such a low setting is unlikely to be necessary.</p>") + \
                        "<p>We recommend increasing the <i>roast min desired rate of rise</i> setting to " + recommended_str + ".</p>"
         if min_profile_curve_gradient < -small_amount and roast_min_desired_rate_of_rise > min_profile_curve_gradient:  # C1
             message += "<p>The profile curve rate of rise goes as low as " + \
-                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit(u"°/min at time ") + \
+                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit("°/min at time ") + \
                        toMinSec(min_profile_curve_gradient_point[0]) + ".</p>" + \
                        "<p>The roast will not follow the curve where the <i>roast min desired rate of rise</i> setting exceeds the " + \
                        "slope of the profile curve.</p>"
         if min_profile_curve_gradient < -small_amount and roast_min_desired_rate_of_rise <= min_profile_curve_gradient:  # C2 C3
             message += "<p>The profile curve rate of rise goes as low as " + \
-                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit(u"°/min at time ") + \
+                       str(round(min_profile_curve_gradient, 1)) + temperature.insertTemperatureUnit("°/min at time ") + \
                        toMinSec(min_profile_curve_gradient_point[0]) + ".</p>"
         dialog = dialogs.enhancedMessageDialog(self)
         if self.fileName == '' or self.importedSuffix is not None:
@@ -5726,7 +5726,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
                                       "Warning", wx.OK)
                         return False
 
-        for config in self.page1.configControls.keys():
+        for config in list(self.page1.configControls.keys()):
             val = self.page1.configControls[config].GetValue()
             if val != '':
                 try:
@@ -5795,7 +5795,7 @@ class MyGraph(wx.Frame, w, BaseDataObject):
 
         else:
             designerName = self.page3.configControls["profile_designer"].GetValue()
-            if len(unicode(designerName).encode('utf-8')) > 31:
+            if len(str(designerName).encode('utf-8')) > 31:
                 designerName = truncateUTF8stringTo(designerName, 31)
                 wx.MessageBox("Profile designer name has been shortened to fit. It will be saved as " + designerName,
                               "Warning", wx.OK)
@@ -5839,7 +5839,7 @@ def validate_levels(self, levels):
             self.setNotebookPageSelection(3)
             self.page4.configControls["roast_levels"].SetFocus()
             wx.MessageBox("Roast levels must be separated by a minimum of " + str(
-                min_sep) + temperature.insertTemperatureUnit(u"°."),
+                min_sep) + temperature.insertTemperatureUnit("°."),
                           "Warning", wx.OK)
             return False
     min_temp = temperature.convertCelciusToSpecifiedUnit(self.emulation_mode.levels_min_temperature, self.temperature_unit)
@@ -5849,7 +5849,7 @@ def validate_levels(self, levels):
         self.page4.configControls["roast_levels"].SetFocus()
         wx.MessageBox(
             "Roast levels must all be higher than " + str(min_temp) +
-            temperature.insertTemperatureUnit(u"°."),
+            temperature.insertTemperatureUnit("°."),
             "Warning", wx.OK)
         return False
     if levels[-1] > max_temp:
@@ -5857,7 +5857,7 @@ def validate_levels(self, levels):
         self.page4.configControls["roast_levels"].SetFocus()
         wx.MessageBox(
             "Roast levels must all be lower than " + str(max_temp) +
-            temperature.insertTemperatureUnit(u"°."),
+            temperature.insertTemperatureUnit("°."),
             "Warning", wx.OK)
         return False
     return True

@@ -1,5 +1,5 @@
 #coding:utf-8
-from __future__ import division
+
 from utilities import toMinSec, fromMinSec, trimTrailingPointZero
 from core_studio import isLinux
 import wx, re, userOptions
@@ -32,7 +32,7 @@ class calculateDialog(wx.Dialog):
         self.grid = grid
 
         TEXTCRL_WIDTH = 150
-        label = wx.StaticText(self, -1, u"Mem")
+        label = wx.StaticText(self, -1, "Mem")
         grid.Add(label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
         self.store_min_sec = wx.TextCtrl(self, -1, '', name='store_min_sec', size=(TEXTCRL_WIDTH, -1))
         self.store_min_sec.Disable()
@@ -41,7 +41,7 @@ class calculateDialog(wx.Dialog):
         self.store_sec.Disable()
         grid.Add(self.store_sec, 0, wx.EXPAND)
 
-        self.parenthesisLabel = wx.StaticText(self, -1, u"")
+        self.parenthesisLabel = wx.StaticText(self, -1, "")
         grid.Add(self.parenthesisLabel, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
         self.intermediate_min_sec = wx.TextCtrl(self, -1, '', name='intermediate_min_sec', size=(TEXTCRL_WIDTH, -1))
         self.intermediate_min_sec.Disable()
@@ -50,7 +50,7 @@ class calculateDialog(wx.Dialog):
         self.intermediate_sec.Disable()
         grid.Add(self.intermediate_sec, 0, wx.EXPAND)
 
-        label = wx.StaticText(self, -1, u"")
+        label = wx.StaticText(self, -1, "")
         grid.Add(label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
         self.answer_min_sec = wx.TextCtrl(self, -1, '', name='answer_min_sec', style=wx.TE_PROCESS_ENTER, size=(TEXTCRL_WIDTH, -1)) 
         self.answer_min_sec.Bind(wx.EVT_TEXT_ENTER, self.onEnter)
@@ -61,13 +61,13 @@ class calculateDialog(wx.Dialog):
         grid.Add(self.answer_sec, 0, wx.EXPAND)
 
         buttonGrid = wx.FlexGridSizer(6, 2, 1, 1)
-        for txt in ['+','-',u'×', u'÷', 'Mem Sto','Mem Rcl','(',')','Clr','Mem Clr', '%','=']: self.addButton(buttonGrid, txt)
+        for txt in ['+','-','×', '÷', 'Mem Sto','Mem Rcl','(',')','Clr','Mem Clr', '%','=']: self.addButton(buttonGrid, txt)
         
         buttons = wx.BoxSizer(wx.HORIZONTAL)
         closeButton = wx.Button(self, label='Close')
         buttons.Add(closeButton, 1, wx.ALL, 7)
         box.Add(grid, 0, wx.ALL, 10)
-        label = wx.StaticText(self, -1, u"Times can be entered in min:sec format, or as seconds.")
+        label = wx.StaticText(self, -1, "Times can be entered in min:sec format, or as seconds.")
         box.Add(label, 0, wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, 10)
 
         box.Add(buttonGrid, 0, wx.ALL | wx.ALIGN_CENTRE, 10)
@@ -175,7 +175,7 @@ class calculateDialog(wx.Dialog):
         if unikeycode == wx.WXK_NONE:
             event.Skip()
             return
-        char = unichr(unikeycode)
+        char = chr(unikeycode)
         self.processChar(event, char)
 
     def processChar(self, event, char):
@@ -210,7 +210,7 @@ class calculateDialog(wx.Dialog):
         elif char == 'R':
             setText(self.answer_min_sec, getText(self.store_min_sec))
             return
-        if char not in u"()+-*×x/÷%=":
+        if char not in "()+-*×x/÷%=":
             if char == chr(wx.WXK_NONE) or ord(char) < ord(' ') or char in "0123456789.:":
                 if self.isAnswerDisplayed:
                     setText(self.answer_min_sec, '')
@@ -221,9 +221,9 @@ class calculateDialog(wx.Dialog):
             self.isAnswerDisplayed = False
             if event is not None: event.Skip()
             return
-        if char in u"-+*×x/÷" and getText(self.answer_min_sec) != '':
-            if char in '*x': char = u'×'
-            if char == '/': char = u'÷'
+        if char in "-+*×x/÷" and getText(self.answer_min_sec) != '':
+            if char in '*x': char = '×'
+            if char == '/': char = '÷'
             if getText(self.intermediate_min_sec) != '':
                 self.compute()
                 self.focusAndClearSelection(self.answer_min_sec)
@@ -249,9 +249,9 @@ class calculateDialog(wx.Dialog):
                 answer = intermediate + time
             elif op == '-':
                 answer =  intermediate - time
-            elif op == '*' or op == u'×':
+            elif op == '*' or op == '×':
                 answer =  intermediate * time
-            elif op == '/' or op == u'÷':
+            elif op == '/' or op == '÷':
                 if time == 0.0:
                     answer = 0.0
                 else:

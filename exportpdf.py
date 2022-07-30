@@ -78,7 +78,7 @@ class exportPDFDialog(wx.Dialog):
                 page_image.SaveFile(f_name, wx.BITMAP_TYPE_PNG)
                 pdf.image(f_name, h=25.4*4)
 
-        for page_number in range(3, 5) if self.parent.fileType == "log" else range(2, 4):
+        for page_number in list(range(3, 5)) if self.parent.fileType == "log" else list(range(2, 4)):
             if self.checkboxes[page_number].GetValue():
                 if imageCount > 0:
                     pdf.add_page()
@@ -91,7 +91,7 @@ class exportPDFDialog(wx.Dialog):
                         <tbody>"""
                 import copy
                 orderedList = copy.deepcopy(self.parent.configurationOrderedKeys)
-                orderedList = [x for x in orderedList if x in where.configControls.keys()]
+                orderedList = [x for x in orderedList if x in list(where.configControls.keys())]
                 line_num = 0
                 for key in orderedList:
                     if where.configControls[key].Shown:

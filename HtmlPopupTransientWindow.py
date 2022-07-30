@@ -111,11 +111,11 @@ def on_info_unhover(event):
     event.Skip()
 
 def formatHint(hints, key):
-    if key in hints.keys():
+    if key in list(hints.keys()):
         hint = hints[key]
         html = "<p><b>" + utilities.replaceUnderscoreWithSpace(key) + "</b> <i>" + hint["difficulty"] + "</i>"
         unit = hint["unit"] if hint["unit"] != 'no unit' else ''
-        default = utilities.trimTrailingPointZero(unicode(wx.App.Get().frame.defaults[key])) if hint["key"] in wx.App.Get().frame.defaults.keys() else ""
+        default = utilities.trimTrailingPointZero(str(wx.App.Get().frame.defaults[key])) if hint["key"] in list(wx.App.Get().frame.defaults.keys()) else ""
         if len(default) > 0 and hint["key"] != 'profile_schema_version':
             html += "<p>Default: " + default + " " + unit
         else:

@@ -107,7 +107,7 @@ class LogPanel(wx.Panel):
         self.reDraw()
 
     def resetHistoryPart2(self):
-        for control in self.configControls.keys():
+        for control in list(self.configControls.keys()):
             if self.configControls[control].IsEnabled():
                 self.history = [core_studio.HistoryConfigEntry(self.configControls[control], isFocusEvent=True)]
                 self.historyIndex = 0
@@ -133,7 +133,7 @@ class LogPanel(wx.Panel):
         if hasattr(self, 'phasesObject') and hasattr(self, 'togglePhases') and self.togglePhases.IsChecked():
             self.phasesObject.recalculateLogPhases()
         for col in frame.logData.columnHeadings:
-            if col in frame.logData.ySeriesScaled.keys():
+            if col in list(frame.logData.ySeriesScaled.keys()):
                 if frame.logData.enabled[col]:
                     linesToGraph.append(PolyLine(frame.logData.ySeriesScaled[col], legend=frame.logData.legends[col],
                                                  colour=colours[0][0], style=colours[0][1], width=frame.lineWidth))
@@ -159,7 +159,7 @@ class LogPanel(wx.Panel):
                                marker=styles[name]["marker"], size=styles[name]["size"],
                                fillstyle=styles[name]["fillstyle"]))
         if self.zoomScale == 1 and not self.expandY:
-            if self.standardize and frame.logData.columnHeadings[0] in frame.logData.ySeriesScaled.keys():
+            if self.standardize and frame.logData.columnHeadings[0] in list(frame.logData.ySeriesScaled.keys()):
                 # expand the standard X axis if the data goes off the right edge, but trim unwanted cooling data
                 roastEndX = frame.logData.roastEventData[frame.logData.roastEventNames.index('roast_end')][
                     0] if 'roast_end' in frame.logData.roastEventNames else float('inf')
@@ -195,7 +195,7 @@ class LogPanel(wx.Panel):
             else:
                 detail = ''
             legend = frame.logData.legendToColumnName(parts[0])
-            scale = frame.logData.yScaleFactors[legend] if legend in frame.logData.yScaleFactors.keys() else \
+            scale = frame.logData.yScaleFactors[legend] if legend in list(frame.logData.yScaleFactors.keys()) else \
                 frame.logData.yScaleFactors[frame.logData.masterColumn]
             decimal_points = int(1 + math.log(scale, 10))
             if legend in ['fan_speed', 'Fan_speed']:

@@ -47,7 +47,7 @@ def textToListOf2Tuples(s):
 
 def listOfStringsToText(l):
     if l == []: return "[]"
-    return u"['" + u"', '".join([utilities.ensureUnicode(s).encode('utf-8').encode('string_escape') for s in l]) + u"']"
+    return "['" + "', '".join([utilities.ensureUnicode(s).encode('utf-8').encode('string_escape') for s in l]) + "']"
     
 def textToListOfStrings(s, allowDoubleQuotes=False):
     if s == "" or s == "[]" or s is None:
@@ -56,15 +56,15 @@ def textToListOfStrings(s, allowDoubleQuotes=False):
     return [x.decode('string_escape').decode('utf-8') for x in re.split(r"[" + q + r"],\s*u?[" + q + r"]", re.sub(r"^\[u?[" + q + "]|[" + q + "]\]$", "", s))]
 
 def messageIfUpdated(window):
-    if "version" in window.options.options.keys() and window.options.options["version"] != core_studio.PROGRAM_VERSION:
+    if "version" in list(window.options.options.keys()) and window.options.options["version"] != core_studio.PROGRAM_VERSION:
         change = 'updated' if core_studio.compareVersions(window.options.options["version"], core_studio.PROGRAM_VERSION) < 0 else 'rolled back'
         wx.MessageBox(core_studio.PROGRAM_NAME + " has been " + change + " to version " + core_studio.PROGRAM_VERSION, "Update", wx.OK)
     window.options.options["version"] = core_studio.PROGRAM_VERSION
     window.options.saveUserOptions()            
 
 def handleTips(window, tips, asHelp = False):
-    if "showtips" not in window.options.options.keys() or window.options.options["showtips"] == "yes" or asHelp:
-        userPref = wx.adv.ShowTip(window, tips, "showtips" not in window.options.options.keys() or window.options.options["showtips"] == "yes" )
+    if "showtips" not in list(window.options.options.keys()) or window.options.options["showtips"] == "yes" or asHelp:
+        userPref = wx.adv.ShowTip(window, tips, "showtips" not in list(window.options.options.keys()) or window.options.options["showtips"] == "yes" )
         tipNumber = tips.CurrentTip
         #print "tips were shown, number =", tipNumber
         window.options.options["tipnumber"] = str(tipNumber)
@@ -132,15 +132,15 @@ class editOptionsDialog(wx.Dialog):
         self.temperature_labels = []
         self.temperature_ctrls = []
 
-        label = wx.StaticText(self, -1, u"Phase 1 name")
+        label = wx.StaticText(self, -1, "Phase 1 name")
         grid.Add(label, (0,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.phase1 = wx.TextCtrl(self, -1, self.options.getUserOption("phase1_name"))
         grid.Add(self.phase1, (0,1), flag=wx.EXPAND)
-        label = wx.StaticText(self, -1, u"Phase 2 name")
+        label = wx.StaticText(self, -1, "Phase 2 name")
         grid.Add(label, (1,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.phase2 = wx.TextCtrl(self, -1, self.options.getUserOption("phase2_name"))
         grid.Add(self.phase2, (1,1), flag=wx.EXPAND)
-        label = wx.StaticText(self, -1, u"Phase 3 name")
+        label = wx.StaticText(self, -1, "Phase 3 name")
         grid.Add(label, (2,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.phase3 = wx.TextCtrl(self, -1, self.options.getUserOption("phase3_name"))
         grid.Add(self.phase3, (2,1), flag=wx.EXPAND)
@@ -150,54 +150,54 @@ class editOptionsDialog(wx.Dialog):
         else:
             spinWidth = 40
             
-        label = wx.StaticText(self, -1, temperature.insertTemperatureUnit(u"Default temperatures (°)"))
+        label = wx.StaticText(self, -1, temperature.insertTemperatureUnit("Default temperatures (°)"))
         self.temperature_labels.append(label)
         grid.Add(label, (3,0), span=(1,2), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
         #default_expect_colrchange
-        label = wx.StaticText(self, -1, u"    Expected colour change")
+        label = wx.StaticText(self, -1, "    Expected colour change")
         grid.Add(label, (4,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.colourChangeCtrl = wx.TextCtrl(self, -1, str(self.options.getUserOption("default_expect_colrchange")))
         self.temperature_ctrls.append(self.colourChangeCtrl)
         grid.Add(self.colourChangeCtrl, (4,1), flag=wx.EXPAND)
         
         #default_expect_fc
-        label = wx.StaticText(self, -1, u"    Expected first crack")
+        label = wx.StaticText(self, -1, "    Expected first crack")
         grid.Add(label, (5,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.firstCrackCtrl = wx.TextCtrl(self, -1, str(self.options.getUserOption("default_expect_fc")))
         self.temperature_ctrls.append(self.firstCrackCtrl)
         grid.Add(self.firstCrackCtrl, (5,1), flag=wx.EXPAND)
         
-        label = wx.StaticText(self, -1, u"Line width")
+        label = wx.StaticText(self, -1, "Line width")
         grid.Add(label, (6,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.lineWidthCtrl = wx.SpinCtrl(self, size=(spinWidth,-1),min=1, max=10, value=str(self.options.getUserOption("linewidth")))
         grid.Add(self.lineWidthCtrl, (6,1))
         
-        label = wx.StaticText(self, -1, u"ROR y-axis multiplier")
+        label = wx.StaticText(self, -1, "ROR y-axis multiplier")
         grid.Add(label, (7,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.rorMultiplierCtrl = wx.SpinCtrl(self, size=(spinWidth,-1),min=1, max=20, value=str(self.options.getUserOption("ror_multiplier")))
         grid.Add(self.rorMultiplierCtrl, (7,1))
         
-        label = wx.StaticText(self, -1, u"ROR smoothing of logs (secs)")
+        label = wx.StaticText(self, -1, "ROR smoothing of logs (secs)")
         grid.Add(label, (8,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.rorSmoothingCtrl = wx.SpinCtrl(self, size=(spinWidth,-1),min=1, max=90, value=str(self.options.getUserOption("ror_smoothing")))
         grid.Add(self.rorSmoothingCtrl, (8,1))
 
-        label = wx.StaticText(self, -1, u"Show second derivative with ROR")
+        label = wx.StaticText(self, -1, "Show second derivative with ROR")
         grid.Add(label, (9,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.showSecondDerivative = wx.CheckBox(self, -1)
         grid.Add(self.showSecondDerivative, (9,1), flag=wx.ALIGN_LEFT)
         self.showSecondDerivative.SetValue(self.options.getUserOption("show_second_derivative") == "yes")
 
-        label = wx.StaticText(self, -1, u"Legend font size (points)")
+        label = wx.StaticText(self, -1, "Legend font size (points)")
         grid.Add(label, (10,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.legendFontSizeCtrl = wx.SpinCtrl(self, size=(spinWidth,-1),min=6, max=18, value=str(self.options.getUserOption("legend_font_size")))
         grid.Add(self.legendFontSizeCtrl, (10,1))
         
-        label = wx.StaticText(self, -1, u"Show tips at startup")
+        label = wx.StaticText(self, -1, "Show tips at startup")
         grid.Add(label, (11,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.tipsCtrl = wx.CheckBox(self, -1)
-        if "showtips" not in self.options.options.keys() or self.options.options["showtips"] == "yes":
+        if "showtips" not in list(self.options.options.keys()) or self.options.options["showtips"] == "yes":
             self.tipsCtrl.SetValue(True)
             self.originalShowTips = True
         else:
@@ -205,19 +205,19 @@ class editOptionsDialog(wx.Dialog):
             self.originalShowTips = False
         grid.Add(self.tipsCtrl, (11,1), flag=wx.ALIGN_LEFT)
 
-        label = wx.StaticText(self, -1, u"Zoom on mouse wheel and scroll gesture")
+        label = wx.StaticText(self, -1, "Zoom on mouse wheel and scroll gesture")
         grid.Add(label, (12,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.zoomOnWheelCtrl = wx.CheckBox(self, -1)
         grid.Add(self.zoomOnWheelCtrl, (12,1), flag=wx.ALIGN_LEFT)
         self.zoomOnWheelCtrl.SetValue(self.options.getUserOption("zoom_on_mouse_wheel") == "yes")
 
-        label = wx.StaticText(self, -1, u"Automatically check for updates")
+        label = wx.StaticText(self, -1, "Automatically check for updates")
         grid.Add(label, (13,0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
         self.automaticUpdateCheck = wx.CheckBox(self, -1)
         grid.Add(self.automaticUpdateCheck, (13,1), flag=wx.ALIGN_LEFT)
         self.automaticUpdateCheck.SetValue(self.options.getUserOption("automatic_check_for_updates") == "yes")
 
-        label = wx.StaticText(self, -1, u"Temperature unit")
+        label = wx.StaticText(self, -1, "Temperature unit")
         box.Add(label, 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
         self.radioCelcius = wx.RadioButton(self, style=wx.RB_GROUP, label="Celcius", name="celcius")
         self.radioFahrenheit = wx.RadioButton(self, label="Fahrenheit", name="fahrenheit")
@@ -229,7 +229,7 @@ class editOptionsDialog(wx.Dialog):
         self.radioCelcius.Bind(wx.EVT_RADIOBUTTON, self.onTemperatureUnitChange)
         self.radioFahrenheit.Bind(wx.EVT_RADIOBUTTON, self.onTemperatureUnitChange)
 
-        label = wx.StaticText(self, -1, u"Position of USB save button")
+        label = wx.StaticText(self, -1, "Position of USB save button")
         box.Add(label, 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
         self.radioInToolbar = wx.RadioButton(self, style=wx.RB_GROUP, label="In tabs", name="usb-top")
         self.radioBottomRight = wx.RadioButton(self, label="Bottom right corner", name="usb-bottom")
@@ -239,7 +239,7 @@ class editOptionsDialog(wx.Dialog):
         if usb_pos == "top":  self.radioInToolbar.SetValue(True)
         else: self.radioBottomRight.SetValue(True)
 
-        label = wx.StaticText(self, -1, u"Position of phases panel")
+        label = wx.StaticText(self, -1, "Position of phases panel")
         box.Add(label, 0, wx.LEFT | wx.TOP | wx.ALIGN_LEFT, 10)
         self.radioPhasesLeft = wx.RadioButton(self, style=wx.RB_GROUP, label="Left", name="phases-left")
         self.radioPhasesRight = wx.RadioButton(self, label="Right", name="phases-right")
@@ -279,7 +279,7 @@ class editOptionsDialog(wx.Dialog):
             self.temperature_unit = "F"
         for widget in self.temperature_labels:
             txt = widget.GetLabel()
-            txt = re.sub(u'°(C|F)', u'°' + self.temperature_unit, txt)
+            txt = re.sub('°(C|F)', '°' + self.temperature_unit, txt)
             widget.SetLabel(txt)
         for widget in self.temperature_ctrls:
             val = widget.GetValue()
@@ -476,7 +476,7 @@ class UserOptions():
         dialog.Destroy()
 
     def saveUserOptions(self):
-        newstring = "\n".join([key + ':' + self.options[key] for key in self.options.keys()])
+        newstring = "\n".join([key + ':' + self.options[key] for key in list(self.options.keys())])
         try:
             with fileCheckingLock:
                 with open(self.fileName, 'w') as output:
@@ -492,11 +492,11 @@ class UserOptions():
         If default is not given as a parameter it comes from DEFAULT_OPTIONS, and failing that it comes back as the empty string.
         If the default is used the option is also saved.
         """
-        if name in self.options.keys():
+        if name in list(self.options.keys()):
             return self.options[name]
         else:
             if default is None:
-                if name in DEFAULT_OPTIONS.keys():
+                if name in list(DEFAULT_OPTIONS.keys()):
                     default = DEFAULT_OPTIONS[name]
                 else:
                     default = ''
@@ -515,7 +515,7 @@ class UserOptions():
         """
         Sets and saves.
         """
-        if name not in self.options.keys() or self.options[name] != value:
+        if name not in list(self.options.keys()) or self.options[name] != value:
             # print 'saving', name, '='
             # print self.options[name]
             # print value

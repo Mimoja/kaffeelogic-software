@@ -2,7 +2,7 @@
 import os, shutil, tarfile
 mypath = os.path.dirname(os.path.abspath(__file__))
 mydest = mypath + os.sep + 'dist'
-print "Cleaning"
+print("Cleaning")
 try:
     shutil.rmtree(mydest)
 except:
@@ -39,8 +39,8 @@ def ignoreme(a=None,b=None):
             ]
         )
     ]
-print "Copying"
+print("Copying")
 shutil.copytree(mypath, mydest, ignore=ignoreme)
-print "Compressing"
+print("Compressing")
 tardir(mydest, 'kaffelogic-studio', mypath + os.sep + 'Output/Kaffelogic Studio 4.4.1.tar.gz')
-print "Archive is ready for picking up from Output folder"
+print("Archive is ready for picking up from Output folder")

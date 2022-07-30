@@ -366,11 +366,11 @@ class PathFitter:
 
 
 def fitpath(pointlist, error=2.5):
-    return PathFitter(list(map(Segment, map(Point, pointlist))), error).fit()
+    return PathFitter(list(map(Segment, list(map(Point, pointlist)))), error).fit()
 
 
 def fitpathsvg(pointlist, error=2.5):
-    return pathtosvg(PathFitter(list(map(Segment, map(Point, pointlist))), error).fit())
+    return pathtosvg(PathFitter(list(map(Segment, list(map(Point, pointlist)))), error).fit())
 
 
 def pathtosvg(path):
@@ -413,4 +413,4 @@ if __name__ == '__main__':
     orig = pathtosvgspots(p, colour="blue", size=5)
     sp = pathtosvg(pf)
     spots = pathtosvgspots(pf, size=3, controlsSize=2)
-    print(makesvgfile(orig+spots+sp, (-100,-100), (500,300)))
+    print((makesvgfile(orig+spots+sp, (-100,-100), (500,300))))

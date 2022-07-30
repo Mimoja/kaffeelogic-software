@@ -144,10 +144,10 @@ class PolyPoints:
         self.scaled = self.points
         self.attributes = {}
         self.attributes.update(self._attributes)
-        for name, value in attr.items():
-            if name not in self._attributes.keys():
+        for name, value in list(attr.items()):
+            if name not in list(self._attributes.keys()):
                 raise KeyError(
-                    "Style attribute incorrect. Should be one of %s" % self._attributes.keys())
+                    "Style attribute incorrect. Should be one of %s" % list(self._attributes.keys()))
             self.attributes[name] = value
 
     def setLogScale(self, logscale):
@@ -1182,7 +1182,7 @@ class PlotCanvas(wx.Panel):
         else:
             # on Linux, we need to correct the font size by a certain factor if wx.GCDC is used,
             # to make text the same size as if wx.GCDC weren't used
-            screenppi = map(float, wx.ScreenDC().GetPPI())
+            screenppi = list(map(float, wx.ScreenDC().GetPPI()))
             ppi = dc.GetPPI()
             self._fontScale = (screenppi[
                                0] / ppi[0] * self._pointSize[0] + screenppi[1] / ppi[1] * self._pointSize[1]) / 2.0
@@ -1439,8 +1439,8 @@ class PlotCanvas(wx.Panel):
                 self._zoomCorner1, self._zoomCorner2)  # add new
         elif self._dragEnabled and event.LeftIsDown():
             coordinates = event.GetPosition()
-            newpos, oldpos = map(np.array, map(
-                self.PositionScreenToUser, [coordinates, self._screenCoordinates]))
+            newpos, oldpos = list(map(np.array, list(map(
+                self.PositionScreenToUser, [coordinates, self._screenCoordinates]))))
             dist = newpos - oldpos
             self._screenCoordinates = coordinates
 

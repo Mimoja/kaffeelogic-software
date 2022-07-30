@@ -109,7 +109,7 @@ def replaceSpaceWithUnderscore(s):
     return re.sub(r" ", r"_", s)
     
 def truncateUTF8stringTo(s, limit):
-    s = unicode(s)
+    s = str(s)
     while len(s.encode('utf-8')) > limit:
         s = s[:-1]
     return s

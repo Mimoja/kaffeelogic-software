@@ -127,7 +127,7 @@ class PhasesPanel():
         roast_end_point = self.parent.frame.logData.roastEventData[self.parent.frame.logData.roastEventNames.index("roast_end")] if "roast_end" in self.parent.frame.logData.roastEventNames else None        
         roast_end_time = roast_end_point[0] if roast_end_point is not None else None
         roast_end_temperature = round(roast_end_point[1], 1) if roast_end_point is not None else None
-        if roast_end_time is None and "development_percent" in self.parent.frame.configuration.keys():
+        if roast_end_time is None and "development_percent" in list(self.parent.frame.configuration.keys()):
             dtr = utilities.floatOrNone(self.parent.frame.configuration["development_percent"])
             fc = utilities.floatOrNone(utilities.fromMinSec(self.parent.frame.configuration["first_crack"]))
             if dtr is not None and fc is not None:
@@ -141,12 +141,12 @@ class PhasesPanel():
         self.phasesControls["first_crack_Time"].ChangeValue(utilities.toMinSec(first_crack_time) if first_crack_time is not None else "")
         self.phasesControls["roast_end_Time"].ChangeValue(utilities.toMinSec(roast_end_time) if roast_end_time is not None else "")
         if updateColrChangeAndFC:
-            self.phasesControls["colour_change_Temperature"].ChangeValue((unicode(colour_change_temperature) +
-                                                                          temperature.insertTemperatureUnit(u'°')) if colour_change_temperature is not None else "")
-            self.phasesControls["first_crack_Temperature"].ChangeValue((unicode(first_crack_temperature) +
-                                                                        temperature.insertTemperatureUnit(u'°')) if first_crack_temperature is not None else "")
-        self.phasesControls["roast_end_Temperature"].ChangeValue((unicode(roast_end_temperature) +
-                                                                  temperature.insertTemperatureUnit(u'°')) if roast_end_temperature is not None else "")
+            self.phasesControls["colour_change_Temperature"].ChangeValue((str(colour_change_temperature) +
+                                                                          temperature.insertTemperatureUnit('°')) if colour_change_temperature is not None else "")
+            self.phasesControls["first_crack_Temperature"].ChangeValue((str(first_crack_temperature) +
+                                                                        temperature.insertTemperatureUnit('°')) if first_crack_temperature is not None else "")
+        self.phasesControls["roast_end_Temperature"].ChangeValue((str(roast_end_temperature) +
+                                                                  temperature.insertTemperatureUnit('°')) if roast_end_temperature is not None else "")
         if initialising:
             self.initial_colour_change_temperature = colour_change_temperature
             self.initial_first_crack_temperature = first_crack_temperature
@@ -158,9 +158,9 @@ class PhasesPanel():
         
     def setPhasesFromProfileData(self):
         colour_change_temp = utilities.replaceZeroWithBlank(self.parent.frame.configuration['expect_colrchange']) \
-                             if 'expect_colrchange' in self.parent.frame.configuration.keys() else ''
+                             if 'expect_colrchange' in list(self.parent.frame.configuration.keys()) else ''
         first_crack_temp = utilities.replaceZeroWithBlank(self.parent.frame.configuration['expect_fc']) \
-                             if 'expect_fc' in self.parent.frame.configuration.keys() else ''
+                             if 'expect_fc' in list(self.parent.frame.configuration.keys()) else ''
         if colour_change_temp == '':
             colour_change_temp = self.parent.frame.options.getUserOption("default_expect_colrchange")
         if first_crack_temp == '':
@@ -170,10 +170,10 @@ class PhasesPanel():
         self.recalculateProfilePhases()
         
     def setColourChange(self, colour_change_temp):
-        self.phasesControls["colour_change_Temperature"].ChangeValue(temperature.removeTemperatureUnit(unicode(colour_change_temp)))
+        self.phasesControls["colour_change_Temperature"].ChangeValue(temperature.removeTemperatureUnit(str(colour_change_temp)))
 
     def setFirstCrack(self, first_crack_temp):
-        self.phasesControls["first_crack_Temperature"].ChangeValue(temperature.removeTemperatureUnit(unicode(first_crack_temp)))
+        self.phasesControls["first_crack_Temperature"].ChangeValue(temperature.removeTemperatureUnit(str(first_crack_temp)))
 
     def getColourChangeControl(self):
         return self.phasesControls["colour_change_Temperature"]
@@ -209,8 +209,8 @@ class PhasesPanel():
 
     def setPhaseData(self, phaseName, duration, overall, rise):
         self.phasesControls[phaseName + "_Duration"].SetValue(utilities.toMinSec(duration))
-        self.phasesControls[phaseName + "_Percent"].SetValue((unicode(round(float(duration)/overall*100.0, 1)) + '%') if overall != 0.0 else '')
-        self.phasesControls[phaseName + "_Increase"].SetValue(unicode(round(rise, 1)) + temperature.insertTemperatureUnit(u'°', self.parent.frame.temperature_unit))
+        self.phasesControls[phaseName + "_Percent"].SetValue((str(round(float(duration)/overall*100.0, 1)) + '%') if overall != 0.0 else '')
+        self.phasesControls[phaseName + "_Increase"].SetValue(str(round(rise, 1)) + temperature.insertTemperatureUnit('°', self.parent.frame.temperature_unit))
         self.phasesControls[phaseName].ShowItems(True)
         self.panel.Layout()
 
@@ -284,8 +284,8 @@ class PhasesPanel():
         self.phasesControls["colour_change_Time"].SetValue(utilities.toMinSec(cc_time))
         self.phasesControls["first_crack_Time"].SetValue(utilities.toMinSec(fc_time))
         self.phasesControls["roast_end_Time"].SetValue(utilities.toMinSec(end_time))
-        self.phasesControls["roast_end_Temperature"].SetValue((unicode(round(end_temp, 1)) +
-                                    temperature.insertTemperatureUnit(u'°', self.parent.frame.temperature_unit)) if end_temp is not None else "")
+        self.phasesControls["roast_end_Temperature"].SetValue((str(round(end_temp, 1)) +
+                                    temperature.insertTemperatureUnit('°', self.parent.frame.temperature_unit)) if end_temp is not None else "")
 
         self.recalculatePercentages(start_time, start_temp, cc_time, cc_temp, fc_time, fc_temp, end_time, end_temp)
 
@@ -337,6 +337,6 @@ class PhasesPanel():
             result += str(round((nowTime - refTime) / denominatorTime * 100, 1)) + "% "
             if tempChange >= 0:
                 result += "+"
-            result += str(round(tempChange, 1)) + temperature.insertTemperatureUnit(u"°")
+            result += str(round(tempChange, 1)) + temperature.insertTemperatureUnit("°")
         return result
 

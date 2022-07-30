@@ -1,4 +1,4 @@
-from __future__ import division
+
 from math import *
 import copy, sys
 
@@ -106,8 +106,8 @@ class HistoryPointsEntry:
     def toDisplay(self):
         for i in range(len(self.profilePoints)):
             if i == self.selectedIndex:
-                print "Selected", self.selectedType, i,
-            print self.profilePoints[i].toTuple()
+                print("Selected", self.selectedType, i, end=' ')
+            print(self.profilePoints[i].toTuple())
 
 
 def bezierPointFromX(x, a, b, c, d):

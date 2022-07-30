@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from __future__ import division
+
 
 import wx, operator, re, os, core_studio, bezier
 from wx.lib.plot import PlotCanvas, PlotGraphics, PolyLine, PolyMarker
@@ -77,10 +77,10 @@ def convertSpecifiedUnitToCelcius(temperature, from_unit=None, rounding=1, delta
 
 def insertTemperatureUnit(s, unit=None):
     if unit is None: unit = getTemperatureUnit()
-    return re.sub(u'°', u'°' + unicode(unit.upper()[0]), unicode(s))
+    return re.sub('°', '°' + str(unit.upper()[0]), str(s))
 
 def removeTemperatureUnit(s):
-    return re.sub(u'°(C|F)', '', s)
+    return re.sub('°(C|F)', '', s)
 
 def makeCelsiusAndApplyEnvelope(temperature, unit='C', rounding=None, envelopeFn=None):
     if temperature == '' or temperature is None: return '0'
@@ -183,7 +183,7 @@ class temperatureEnvelopeDialog(wx.Dialog):
     
     def __init__(self, parent, frame, targetSystem, optionsName, default, envelopeApplier):
         super(temperatureEnvelopeDialog, self).__init__(parent) 
-        self.SetTitle(u"Temperature conversion")
+        self.SetTitle("Temperature conversion")
         self.parent = parent
         self.frame = frame
         self.targetSystem = targetSystem
@@ -226,7 +226,7 @@ class temperatureEnvelopeDialog(wx.Dialog):
 
     def envelopeControls(self):
         controls = wx.StaticBoxSizer(wx.StaticBox(self), wx.HORIZONTAL)
-        label = wx.StaticText(self, -1, u"Envelope:")
+        label = wx.StaticText(self, -1, "Envelope:")
         saveButton = wx.Button(self, -1, 'Save', style=wx.BU_EXACTFIT)
         loadButton = wx.Button(self, -1, 'Load', style=wx.BU_EXACTFIT)
         copyButton = wx.Button(self, -1, 'Copy', style=wx.BU_EXACTFIT)
@@ -299,8 +299,8 @@ class temperatureEnvelopeDialog(wx.Dialog):
         self.reDraw()
 
     def addItems(self, grid, envelope):
-        label0 = wx.StaticText(self, -1, insertTemperatureUnit(u"° Kaffelogic"))
-        label1 = wx.StaticText(self, -1, insertTemperatureUnit(u"° ") + self.targetSystem)
+        label0 = wx.StaticText(self, -1, insertTemperatureUnit("° Kaffelogic"))
+        label1 = wx.StaticText(self, -1, insertTemperatureUnit("° ") + self.targetSystem)
         grid.Add(label0, pos=(0, 0), flag=wx.EXPAND | wx.TOP | wx.BOTTOM, border=1)
         grid.Add(label1, pos=(0, 1), flag=wx.EXPAND | wx.TOP | wx.BOTTOM, border=1)
         self.rowCount = 1
@@ -353,7 +353,7 @@ class temperatureEnvelopeDialog(wx.Dialog):
                                       wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         result = saveFileDialog.ShowModal()
         saveFileName, ext = os.path.splitext(saveFileDialog.GetPath())
-        print 'saveFileName, ext', saveFileName, ext
+        print('saveFileName, ext', saveFileName, ext)
         saveFileName += ext
         if ext.lower() != '.kenvl':
             saveFileName += '.kenvl'
@@ -362,7 +362,7 @@ class temperatureEnvelopeDialog(wx.Dialog):
             wx.CallAfter(self.saveEnvelope, saveFileName)
 
     def saveEnvelope(self, saveFileName):
-        print "saveFileName", saveFileName
+        print("saveFileName", saveFileName)
         data = str(convertSpecifiedUnitEnvelopeToCelcius(self.getEnvelopeFromControls()))
         try:
             with open(saveFileName, 'w') as output:
@@ -527,8 +527,8 @@ if __name__ == '__main__':
     c=TemperatureEnvelopeApplier([(10, 10), (100, 150), (200, 200)])
     L = []
     for T in range(0,200, 10):
-        print str(T) + "\t" + str(c.kaffelogicToOther(T))
+        print(str(T) + "\t" + str(c.kaffelogicToOther(T)))
         L.append(c.kaffelogicToOther(T))
-    print "========================================================"
+    print("========================================================")
     for T in L:
-        print str(T) + "\t" + str(c.otherToKaffelogic(T))
+        print(str(T) + "\t" + str(c.otherToKaffelogic(T)))

@@ -81,7 +81,7 @@ class transformDialog(wx.Dialog):
             box.Add(helpText, 0, wx.ALL | wx.ALIGN_CENTRE, 10)
 
         grid = wx.FlexGridSizer(2, 4, 5, 5)
-        label = wx.StaticText(self, -1, u"Time \u2715")
+        label = wx.StaticText(self, -1, "Time \u2715")
         grid.Add(label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
         self.m_time = wx.TextCtrl(self, -1, "1.0", name='m_time')
         grid.Add(self.m_time, 0, wx.EXPAND)
@@ -92,9 +92,9 @@ class transformDialog(wx.Dialog):
 
         if title != 'profile settings':
             if title == 'roast profile curve':
-                label = wx.StaticText(self, -1, u"Temperature \u2715")
+                label = wx.StaticText(self, -1, "Temperature \u2715")
             if title == 'fan profile curve':
-                label = wx.StaticText(self, -1, u"RPM \u2715")
+                label = wx.StaticText(self, -1, "RPM \u2715")
             grid.Add(label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             self.m_temperature = wx.TextCtrl(self, -1, "1.0", name='m_temperature')
             grid.Add(self.m_temperature, 0, wx.EXPAND)
@@ -218,7 +218,7 @@ class areaUnderCurveDialog(wx.Dialog):
             box = wx.BoxSizer(wx.VERTICAL)
 
             grid = wx.GridBagSizer(5, 5)
-            label = wx.StaticText(self, -1, u"Base time")
+            label = wx.StaticText(self, -1, "Base time")
             grid.Add(label, pos=(0, 0), span=(1, 1), flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             self.base_time = wx.TextCtrl(self, -1, "", name='base_time')
             grid.Add(self.base_time, pos=(0, 1), span=(1, 1), flag=wx.EXPAND)
@@ -226,13 +226,13 @@ class areaUnderCurveDialog(wx.Dialog):
             grid.Add(label, pos=(0, 2), span=(1, 1), flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             self.end_time = wx.TextCtrl(self, -1, "", name='end_time')
             grid.Add(self.end_time, pos=(0, 3), span=(1, 1), flag=wx.EXPAND)
-            label = wx.StaticText(self, -1, u"Base Temperature")
+            label = wx.StaticText(self, -1, "Base Temperature")
             grid.Add(label, pos=(1, 0), span=(1, 1), flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
             self.base_temperature = wx.TextCtrl(self, -1, "", name='base_temperature')
             grid.Add(self.base_temperature, pos=(1, 1), span=(1, 1), flag=wx.EXPAND)
             self.from_curve = wx.CheckBox(self, label="from curve")
             grid.Add(self.from_curve, pos=(1, 2), span=(1, 2), flag=wx.EXPAND)
-            self.answer = wx.StaticText(self, -1, u"AUC")
+            self.answer = wx.StaticText(self, -1, "AUC")
             font = self.answer.GetFont()
             font.SetWeight(wx.BOLD)
             self.answer.SetFont(font)
@@ -292,7 +292,7 @@ class areaUnderCurveDialog(wx.Dialog):
                 return
             auc -= (end - start) * base
             auc /= 60.0
-            self.answer.SetLabel(str(round(auc, 1)) + temperature.insertTemperatureUnit(u" ° × min"))
+            self.answer.SetLabel(str(round(auc, 1)) + temperature.insertTemperatureUnit(" ° × min"))
 
     def onCloseButton(self, e):
         self.Close()
@@ -315,7 +315,7 @@ class captureImageDialog(wx.Dialog):
         box = wx.BoxSizer(wx.VERTICAL)
 
         grid = wx.FlexGridSizer(1, 4, 5, 5)
-        label = wx.StaticText(self, -1, u"Width")
+        label = wx.StaticText(self, -1, "Width")
         grid.Add(label, 0, wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
         self.width = wx.SpinCtrl(parent=self, min=100, max=1000000)
         grid.Add(self.width, 0, wx.EXPAND)

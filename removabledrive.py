@@ -24,7 +24,7 @@ if isLinux:
 
 
     def rootDrive():
-        return expanduser(u"~") + '/'
+        return expanduser("~") + '/'
 
 
     def drives():
@@ -40,7 +40,7 @@ if isLinux:
         mountpoints = []
         _unnamedVolumes = []
         for dev in lsblk['blockdevices']:
-            if dev['tran'] is not None and dev['tran'].lower() == 'usb' and 'children' in dev.keys() and dev[
+            if dev['tran'] is not None and dev['tran'].lower() == 'usb' and 'children' in list(dev.keys()) and dev[
                 'children'] is not None:
                 children = dev['children']
                 for child in children:
@@ -95,7 +95,7 @@ if isLinux:
 
 
     if __name__ == '__main__':
-        print drives()
+        print(drives())
 
 if isWindows:
     from ctypes import *
@@ -114,7 +114,7 @@ if isWindows:
 
     argc = c_int(0)
     argv_unicode = CommandLineToArgvW(GetCommandLineW(), byref(argc))
-    argv = [unicode(argv_unicode[i]) for i in range(0, argc.value)]
+    argv = [str(argv_unicode[i]) for i in range(0, argc.value)]
 
     if not hasattr(sys, 'frozen'):
         # If this is an executable produced by py2exe or bbfreeze, then it will
@@ -197,7 +197,7 @@ if isWindows:
         startupinfo.dwFlags |= _subprocess.STARTF_USESHOWWINDOW
         startupinfo.wShowWindow = _subprocess.SW_HIDE
         try:
-            raw = unicode(subprocess.check_output('wmic path win32_logicalDisktopartition get Antecedent,Dependent',
+            raw = str(subprocess.check_output('wmic path win32_logicalDisktopartition get Antecedent,Dependent',
                                               startupinfo=startupinfo))
         except (IOError, WindowsError):
             return None
@@ -213,7 +213,7 @@ if isWindows:
             drive = re.sub(r':"', '', drive)
             disk_to_drive[disk] = drive
         try:
-            raw = unicode(subprocess.check_output('wmic diskdrive get interfacetype,index', startupinfo=startupinfo))
+            raw = str(subprocess.check_output('wmic diskdrive get interfacetype,index', startupinfo=startupinfo))
         except (IOError, WindowsError):
             return None
         raw = re.sub(r'\r', '', raw)
@@ -224,7 +224,7 @@ if isWindows:
             # print row
             row = row.strip().split(' ')
             if len(row) == 2:
-                if row[1].lower() == 'usb' and row[0] in disk_to_drive.keys():
+                if row[1].lower() == 'usb' and row[0] in list(disk_to_drive.keys()):
                     usb_drivelist.append(disk_to_drive[row[0]])
         return usb_drivelist
 
@@ -357,7 +357,7 @@ if isWindows:
 
 
     if __name__ == '__main__':
-        print getUsbDriveList()
+        print(getUsbDriveList())
         """
         import win32gui  
         class Notification:
@@ -463,7 +463,7 @@ if isMac:
 
 
     def rootDrive():
-        return expanduser(u"~") + '/'
+        return expanduser("~") + '/'
 
 
     def drives():
@@ -477,15 +477,15 @@ if isMac:
         global _diskData
         drivelist = []
         disklist = rPFS(shell('diskutil list -plist'))
-        if disklist is not None and 'AllDisks' in disklist.keys():
+        if disklist is not None and 'AllDisks' in list(disklist.keys()):
             latest = disklist['AllDisks']
             if _diskData[0] is not None and _diskData[1] is not None and _diskData[0] == latest: return _diskData[1]
             for disk in latest:
                 diskinfo = rPFS(shell2('diskutil info -plist', disk.encode('utf-8')))
-                if diskinfo is not None and 'BusProtocol' in diskinfo.keys() and diskinfo['BusProtocol'].lower() == 'usb' \
-                        and 'Internal' in diskinfo.keys() and diskinfo['Internal'] == False \
-                        and 'MountPoint' in diskinfo.keys() and diskinfo['MountPoint'] != '' \
-                        and 'FilesystemName' in diskinfo.keys() \
+                if diskinfo is not None and 'BusProtocol' in list(diskinfo.keys()) and diskinfo['BusProtocol'].lower() == 'usb' \
+                        and 'Internal' in list(diskinfo.keys()) and diskinfo['Internal'] == False \
+                        and 'MountPoint' in list(diskinfo.keys()) and diskinfo['MountPoint'] != '' \
+                        and 'FilesystemName' in list(diskinfo.keys()) \
                         and ' fat' in diskinfo['FilesystemName'].lower():
                     drivelist.append(utilities.ensureUnicode(diskinfo['MountPoint']) + '/')
             _diskData = (latest, drivelist)

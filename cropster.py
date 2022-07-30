@@ -29,7 +29,7 @@ def translateEventCropsterToKaffelogic(e):
         "Second crack end": "second_crack_end",
         "Duration": "roast_end"
     }
-    return event_translation[e] if e in event_translation.keys() else e
+    return event_translation[e] if e in list(event_translation.keys()) else e
 
 
 def ensure_celcius_temperature(temperature, unit):
@@ -80,7 +80,7 @@ def extract_events(book):
     dic = add_comments_array_to_dictionary(sheet_to_array(book.sheets()[1]),
                                            general_array_to_dictionary(sheet_to_array(book.sheets()[0])))
     text = ''
-    for key in dic.keys():
+    for key in list(dic.keys()):
         event = translateEventCropsterToKaffelogic(key)
         if event != key:
             text += event + ':' + str(utilities.fromMinSec(dic[key])) + '\n'
@@ -96,9 +96,9 @@ def extract_notes(book, is_profile):
         heading = headers[i]
         info = information[i]
         if i + 1 <= len(headers) - 1 and headers[i + 1].endswith(' unit'):
-            note += unicode(heading) + ': ' + unicode(info) + ' ' + information[i + 1] + ', '
+            note += str(heading) + ': ' + str(info) + ' ' + information[i + 1] + ', '
         elif heading != '' and info != '' and not heading.endswith(' unit'):
-            note += unicode(heading) + ': ' + unicode(info) + ', '
+            note += str(heading) + ': ' + str(info) + ', '
     result = 'tasting_notes:' + utilities.encodeCtrlV(re.sub(', $', '', note)) + '\n'
     if is_profile: result += 'profile_description:' + utilities.encodeCtrlV(re.sub(', $', '', note)) + '\n'
     return result
@@ -160,11 +160,11 @@ def extract_temperature_units(s):
 def cropsterToKlog(cropster_book, filename, is_profile, converter):
     if cropster_book is None: return ('', '')
     general = general_array_to_dictionary(sheet_to_array(cropster_book.sheets()[0]))
-    date = str(general["Date"]) if "Date" in general.keys() else ''
+    date = str(general["Date"]) if "Date" in list(general.keys()) else ''
     klog = "log_file_name:" + filename + '\n'
     klog += extract_notes(cropster_book, is_profile)
     klog += extract_events(cropster_book)
-    roast_end = str(utilities.fromMinSec(general["Duration"])) if "Duration" in general.keys() else ''
+    roast_end = str(utilities.fromMinSec(general["Duration"])) if "Duration" in list(general.keys()) else ''
     if roast_end != '':
         klog += "roast_end:" + roast_end + '\n'
     klog += '\n' + extract_header(cropster_book)
