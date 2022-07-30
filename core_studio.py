@@ -1898,9 +1898,9 @@ def displayUpdateStatus(self, data, errorMessage, onlyAlertIfUpdateAvailable, fl
         if onlyAlertIfUpdateAvailable:
             return
     else:
-        softVersion = extractVersionFromNotes(data[0])
+        softVersion = extractVersionFromNotes(data[0].decode("utf-8"))
         softStatus = compareVersions(softVersion, PROGRAM_VERSION)
-        firmVersion = extractVersionFromNotes(data[1])
+        firmVersion = extractVersionFromNotes(data[1].decode("utf-8"))
         frame = wx.App.Get().frame
         highest = frame.options.getUserOption("highest_firmware_version_seen")
         firmStatus = compareVersions(firmVersion, highest) if not (highest == '' and onlyAlertIfUpdateAvailable) else 0

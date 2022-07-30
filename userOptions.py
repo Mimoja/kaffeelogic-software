@@ -573,7 +573,7 @@ def onFileCheckingWatchdogTimer(e):
     There is a suspicion that during sleep the thread might sometimes close. This check prevents that possibility,
     however remote a probability, without doing any harm.
     """
-    if not fileCheckingWorker[4].isAlive():
+    if not fileCheckingWorker[4].is_alive():
         frame = fileCheckingWorker[0]
         obj = fileCheckingWorker[1]
         callbackOptionsChange = fileCheckingWorker[2]
