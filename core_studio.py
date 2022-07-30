@@ -1143,7 +1143,7 @@ def openAndReadFile(fileName):
     datastring = ""
     try:
         with open(fileName, 'r') as infile:
-            datastring = infile.read().decode('utf-8')
+            datastring = infile.read()
     except IOError as e:
         dial = wx.MessageDialog(None, 'This file could not be opened.\n' + fileName + '\n' + e.strerror + '.', 'Error',
                                 wx.OK | wx.ICON_EXCLAMATION)
@@ -1428,6 +1428,9 @@ def drawProfile(self, title, yAxis, profilePoints, selectedIndex, selectedType, 
                               width=self.frame.lineWidth)
     second_derivative_points = []
     recommended_temperature = temperatureFromLevel(levelString, thresholdString)
+    if recommended_temperature is None:
+        recommended_temperature = float("-inf")
+
     highest_temperature = temperatureFromLevel(self.frame.emulation_mode.level_max_val, thresholdString)
     self.recommended_endpoint = None
     self.highest_endpoint = None
@@ -1451,7 +1454,7 @@ def drawProfile(self, title, yAxis, profilePoints, selectedIndex, selectedType, 
         else:
             if i + 1 == selectedIndex:
                 control_points.append(c.toTuple())
-        low_temperature = min(a.y, d.y)
+        low_temperature = min(a.y, d.y) 
         high_temperature = max(a.y, d.y)
         if recommended_temperature > low_temperature and recommended_temperature <= high_temperature and self.recommended_endpoint is None:
             if bezierLineMode:
@@ -2562,7 +2565,7 @@ class ProfilePanel(wx.Panel):
                 minY = min(minimumY(self.secdivsAsGraphedScaled), minY)
             minY = max(minY, temperature.convertCelciusToSpecifiedUnit(DERIVATIVE_ALLOWED_YRANGE[0], self.frame.temperature_unit))
             max_xAxis = (minX, maxX)
-            max_yAxis = None if self.title == 'Fan Profile Curve' else (minY, maxY)
+            max_yAxis = (minY, maxY) #  None if self.title == 'Fan Profile Curve' else (minY, maxY) #TODO
             self.canvas.Draw(thisProfile,
                              xAxis=xAxis if xAxis is not None else max_xAxis,
                              yAxis=yAxis if yAxis is not None else max_yAxis)
