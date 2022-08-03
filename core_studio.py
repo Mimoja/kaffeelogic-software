@@ -2595,6 +2595,7 @@ class ProfilePanel(wx.Panel):
                     thisLabel += self.phasesObject.displayPhaseData(nowTime=self.closest_point.x,
                                                                     nowTemperature=float(displayData["value"]))
             self.displaySelectedText = initialiseDisplaySelectedText(self, thisLabel)
+        self.canvas.Refresh()
 
     def disableOrEnableLevelSpinner(self):
         if hasattr(self, 'level_floatspin'):
